@@ -4,11 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="Добавлены основные классы и запуск игры">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_16_12_2024_18_40__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_16_12_2024_18_40__Changes_.xml" afterDir="false" />
+    <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="Добавлена функция загрузки изображения">
+      <change afterPath="$PROJECT_DIR$/images/asteroids/Астероид в космосе.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/asteroids/Астероид из блэндера.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/asteroids/Астероиды (15 шт).jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/asteroids/Круглый астреоид на белом фоне.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/classes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +27,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;andrey3304&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/egorchik9100/PygameProjectYandexLuceum.git&quot;,
+    &quot;accountId&quot;: &quot;57ebb346-82df-44fe-a890-6bcea333a9f3&quot;
+  }
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -40,10 +56,16 @@
     "Python.main.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Egor__Chelnokov",
-    "last_opened_file_path": "C:/Users/Sense/PycharmProjects/PygameProjectYandexLuceum/main.py"
+    "git-widget-placeholder": "andrey-belikov",
+    "last_opened_file_path": "C:/Users/user/PycharmProjects/PygameProjectYandexLuceum",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\user\PycharmProjects\PygameProjectYandexLuceum\images\asteroids" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python">
       <module name="PygameProjectYandexLuceum" />
@@ -54,7 +76,6 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.11 (PygameProjectYandexLuceum)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -72,7 +93,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-50da183f06c8-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.13135.95" />
+        <option value="bundled-python-sdk-d7ad00fb9fc3-c546a90a8094-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.23726.102" />
       </set>
     </attachedChunks>
   </component>
@@ -93,7 +114,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734363848652</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Добавлена функция загрузки изображения">
+      <option name="closed" value="true" />
+      <created>1734812895369</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1734812895369</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -110,6 +139,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="комит тз" />
     <MESSAGE value="Добавлены основные классы и запуск игры" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавлены основные классы и запуск игры" />
+    <MESSAGE value="Добавлена функция загрузки изображения" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавлена функция загрузки изображения" />
   </component>
 </project>

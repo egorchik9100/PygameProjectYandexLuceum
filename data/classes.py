@@ -1,7 +1,8 @@
 import math
 import random
-
 import pygame
+
+from data.functions import load_image
 
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -87,8 +88,10 @@ class MainScene:
             clock.tick(60)
 
 
-class Asteroid:
+class Asteroid(pygame.sprite.Sprite):
     def __init__(self, screen):
+        super().__init__()
+        self.image = load_image("Круглый астреоид на белом фоне.png")
         self.screen = screen
         self.size = random.randint(20, 50)
         self.x = random.randint(0, width - self.size)
@@ -145,4 +148,3 @@ class Bullet(pygame.sprite.Sprite):
 
     def is_off_screen(self):
         return self.x < 0 or self.x > width or self.y < 0 or self.y > height
-
