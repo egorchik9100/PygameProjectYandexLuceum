@@ -1,0 +1,24 @@
+Index: .idea/inspectionProfiles/Project_Default.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><component name=\"InspectionProjectProfileManager\">\r\n  <profile version=\"1.0\">\r\n    <option name=\"myName\" value=\"Project Default\" />\r\n    <inspection_tool class=\"PyPackageRequirementsInspection\" enabled=\"true\" level=\"WARNING\" enabled_by_default=\"true\">\r\n      <option name=\"ignoredPackages\">\r\n        <value>\r\n          <list size=\"2\">\r\n            <item index=\"0\" class=\"java.lang.String\" itemvalue=\"audioplayer\" />\r\n            <item index=\"1\" class=\"java.lang.String\" itemvalue=\"PyQt6\" />\r\n          </list>\r\n        </value>\r\n      </option>\r\n    </inspection_tool>\r\n  </profile>\r\n</component>
+===================================================================
+diff --git a/.idea/inspectionProfiles/Project_Default.xml b/.idea/inspectionProfiles/Project_Default.xml
+--- a/.idea/inspectionProfiles/Project_Default.xml	
++++ b/.idea/inspectionProfiles/Project_Default.xml	
+@@ -1,12 +1,12 @@
+ <component name="InspectionProjectProfileManager">
+   <profile version="1.0">
+     <option name="myName" value="Project Default" />
+-    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
++    <inspection_tool class="PyPackageRequirementsInspection" enabled="false" level="WARNING" enabled_by_default="false">
+       <option name="ignoredPackages">
+         <value>
+           <list size="2">
+-            <item index="0" class="java.lang.String" itemvalue="audioplayer" />
+-            <item index="1" class="java.lang.String" itemvalue="PyQt6" />
++            <item index="0" class="java.lang.String" itemvalue="PyQt6_sip" />
++            <item index="1" class="java.lang.String" itemvalue="et_xmlfile" />
+           </list>
+         </value>
+       </option>
