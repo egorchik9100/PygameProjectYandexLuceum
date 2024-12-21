@@ -1,13 +1,12 @@
-import pygame
-import random
 import math
+import random
 
+import pygame
 
 white = (255, 255, 255)
 black = (0, 0, 0)
 red = (255, 0, 0)
 width, height = 800, 600
-
 
 
 class MainScene:
@@ -47,7 +46,7 @@ class MainScene:
             if keys[pygame.K_SPACE] and self.can_shoot and current_time - self.last_shot_time > self.shoot_delay:
                 self.bullets.append(Bullet(self.turret.x + 50 * math.cos(math.radians(self.turret.angle)),
                                            self.turret.y - 50 * math.sin(math.radians(self.turret.angle)),
-                                           self.turret.angle, self.screen))
+                                           self.turret.angle, self.screen, 1))
                 self.can_shoot = False  # Запрещаем стрельбу
                 self.last_shot_time = current_time  # Обновляем время последнего выстрела
             # Разрешаем стрельбу
@@ -127,10 +126,10 @@ class Turret:
         pygame.draw.circle(self.screen, white, (self.x, self.y), 10)  # Основа турели
 
 
-
-
-class Bullet:
-    def __init__(self, x, y, angle, screen):
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, x, y, angle, screen, force):
+        super().__init__()
+        self.force = force
         self.screen = screen
         self.x = x
         self.y = y
