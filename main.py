@@ -10,7 +10,7 @@ def main():
     width, height = 800, 600
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Турель против астероидов")
-    game_scene = MainScene()
+    game_scene = MainScene(screen)
     run = True
     while run:
         run = game_scene.run_game()
