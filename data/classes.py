@@ -1,13 +1,12 @@
-import pygame
-import random
 import math
+import random
 
+import pygame
 
 white = (255, 255, 255)
 black = (0, 0, 0)
 red = (255, 0, 0)
 width, height = 800, 600
-
 
 
 class MainScene:
