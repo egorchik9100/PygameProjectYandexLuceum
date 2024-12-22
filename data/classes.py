@@ -87,6 +87,36 @@ class MainScene:
             clock.tick(60)
 
 
+class StartWindow:
+    def __init__(self, screen):
+        self.screen = screen
+        self.font = pygame.font.SysFont("Arial", 36)
+
+    def draw_button(self, text, x, y, width, height):
+        pygame.draw.rect(self.screen, 'gray', (x, y, width, height))
+        pygame.draw.rect(self.screen, 'black', (x, y, width, height), 3)
+
+        label = self.font.render(text, True, 'black')
+        text_rect = label.get_rect(center=(x + width // 2, y + height // 2))
+        self.screen.blit(label, text_rect)
+
+    def main_menu(self):
+        running = True
+        while True:
+            self.screen.fill('white')
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                    return running
+
+            play_button = pygame.Rect(width // 2 - 150, height // 2 - 50, 300, 50)
+            records_button = pygame.Rect(width // 2 - 150, height // 2 + 20, 300, 50)
+            self.draw_button("Играть", play_button.x, play_button.y, play_button.width, play_button.height)
+            self.draw_button("Рекорды", records_button.x, records_button.y, records_button.width, records_button.height)
+
+            pygame.display.update()
+
+
 class Asteroid:
     def __init__(self, screen):
         self.screen = screen
