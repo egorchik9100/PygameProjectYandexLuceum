@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="Добавлены основные классы и запуск игры">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_16_12_2024_18_40__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_16_12_2024_18_40__Changes_.xml" afterDir="false" />
+    <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="В классе добавлен метод damage для считывания урона и метод random_image_asteroid для выбора случайного изображения в зависимости от размера, а также начат метод draw который ставит изображения в зависимости от размера">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,11 +17,23 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="develop" />
+        <entry key="$PROJECT_DIR$" value="andrey-belikov" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;andrey3304&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/egorchik9100/PygameProjectYandexLuceum.git&quot;,
+    &quot;accountId&quot;: &quot;57ebb346-82df-44fe-a890-6bcea333a9f3&quot;
+  }
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -34,16 +45,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.classes.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Egor__Chelnokov&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Sense/PycharmProjects/PygameProjectYandexLuceum/main.py&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.classes.executor": "Run",
+    "Python.main.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "develop",
+    "last_opened_file_path": "C:/Users/user/PycharmProjects/PygameProjectYandexLuceum",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\user\PycharmProjects\PygameProjectYandexLuceum\images\asteroids" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python">
       <module name="PygameProjectYandexLuceum" />
@@ -71,7 +88,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-50da183f06c8-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.13135.95" />
+        <option value="bundled-python-sdk-d7ad00fb9fc3-c546a90a8094-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.23726.102" />
       </set>
     </attachedChunks>
   </component>
@@ -92,7 +109,55 @@
       <option name="project" value="LOCAL" />
       <updated>1734363848652</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Добавлена функция загрузки изображения">
+      <option name="closed" value="true" />
+      <created>1734812895369</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1734812895369</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Добавлена папка с изображениями астероидов">
+      <option name="closed" value="true" />
+      <created>1734814213234</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1734814213234</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Добавлено ограничение фпс - 60">
+      <option name="closed" value="true" />
+      <created>1734814246204</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1734814246204</updated>
+    </task>
+    <task id="LOCAL-00005" summary="В классе добавлена переменная с изображением">
+      <option name="closed" value="true" />
+      <created>1734814278402</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1734814278402</updated>
+    </task>
+    <task id="LOCAL-00006" summary="В классе добавлен метод рисования которй в зависимости от размера астероида ставит картинку определенного размера">
+      <option name="closed" value="true" />
+      <created>1734866588790</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1734866588790</updated>
+    </task>
+    <task id="LOCAL-00007" summary="В классе добавлен метод damage для считывания урона и метод random_image_asteroid для выбора случайного изображения в зависимости от размера, а также начат метод draw который ставит изображения в зависимости от размера">
+      <option name="closed" value="true" />
+      <created>1734875431260</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1734875431260</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -109,6 +174,12 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="комит тз" />
     <MESSAGE value="Добавлены основные классы и запуск игры" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавлены основные классы и запуск игры" />
+    <MESSAGE value="Добавлена функция загрузки изображения" />
+    <MESSAGE value="Добавлена папка с изображениями астероидов" />
+    <MESSAGE value="Добавлено ограничение фпс - 60" />
+    <MESSAGE value="В классе добавлена переменная с изображением" />
+    <MESSAGE value="В классе добавлен метод рисования которй в зависимости от размера астероида ставит картинку определенного размера" />
+    <MESSAGE value="В классе добавлен метод damage для считывания урона и метод random_image_asteroid для выбора случайного изображения в зависимости от размера, а также начат метод draw который ставит изображения в зависимости от размера" />
+    <option name="LAST_COMMIT_MESSAGE" value="В классе добавлен метод damage для считывания урона и метод random_image_asteroid для выбора случайного изображения в зависимости от размера, а также начат метод draw который ставит изображения в зависимости от размера" />
   </component>
 </project>

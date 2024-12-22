@@ -87,6 +87,36 @@ class MainScene:
             clock.tick(60)
 
 
+class StartWindow:
+    def __init__(self, screen):
+        self.screen = screen
+        self.font = pygame.font.SysFont("Arial", 36)
+
+    def draw_button(self, text, x, y, width, height):
+        pygame.draw.rect(self.screen, 'gray', (x, y, width, height))
+        pygame.draw.rect(self.screen, 'black', (x, y, width, height), 3)
+
+        label = self.font.render(text, True, 'black')
+        text_rect = label.get_rect(center=(x + width // 2, y + height // 2))
+        self.screen.blit(label, text_rect)
+
+    def main_menu(self):
+        running = True
+        while True:
+            self.screen.fill('white')
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                    return running
+
+            play_button = pygame.Rect(width // 2 - 150, height // 2 - 50, 300, 50)
+            records_button = pygame.Rect(width // 2 - 150, height // 2 + 20, 300, 50)
+            self.draw_button("Играть", play_button.x, play_button.y, play_button.width, play_button.height)
+            self.draw_button("Рекорды", records_button.x, records_button.y, records_button.width, records_button.height)
+
+            pygame.display.update()
+
+
 class Asteroid:
     def __init__(self, screen):
         self.screen = screen
@@ -145,34 +175,3 @@ class Bullet(pygame.sprite.Sprite):
 
     def is_off_screen(self):
         return self.x < 0 or self.x > width or self.y < 0 or self.y > height
-
-
-class StartWindow():
-    pygame.init()
-
-    window = pygame.display.set_mode((800, 600))
-    pygame.display.set_caption("pygame game")
-    font = pygame.font.SysFont("Arial", 36)
-
-    def draw_button(self, text, x, y, width, height):
-        pygame.draw.rect(window, 'gray', (x, y, width, height))
-        pygame.draw.rect(window, 'black', (x, y, width, height), 3)
-
-        label = font.render(text, True, 'black')
-        text_rect = label.get_rect(center=(x + width // 2, y + height // 2))
-        window.blit(label, text_rect)
-
-    def main_menu(self):
-        while True:
-            window.fill('white')
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-
-            play_button = pygame.Rect(WIDTH // 2 - 150, HEIGHT // 2 - 50, 300, 50)
-            records_button = pygame.Rect(WIDTH // 2 - 150, HEIGHT // 2 + 20, 300, 50)
-            draw_button("Играть", play_button.x, play_button.y, play_button.width, play_button.height)
-            draw_button("Рекорды", records_button.x, records_button.y, records_button.width, records_button.height)
-
-            pygame.display.update()
