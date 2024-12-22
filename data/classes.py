@@ -1,7 +1,8 @@
 import math
 import random
-
+from data.functions import load_image
 import pygame
+from random import choice
 
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -117,14 +118,23 @@ class StartWindow:
             pygame.display.update()
 
 
-class Asteroid:
+class Asteroid(pygame.sprite.Sprite):
     def __init__(self, screen):
+        super().__init__()
         self.screen = screen
         self.size = random.randint(20, 50)
         self.x = random.randint(0, width - self.size)
         self.y = -self.size
         self.speed = random.randint(2, 5)
         self.health = random.randint(20, 50)
+        self.image_rnd = []
+
+    def random_image_asteroid(self, num):
+        self.image_rnd = [f"Астероид в космосе_{num}.jpg",
+                          f"Астероид из блэндера_{num}.jpg",
+                          f"Круглый астреоид на белом фоне_{num}.png"]
+        return choice(self.image_rnd)
+
 
     def update(self):
         self.y += self.speed
@@ -133,7 +143,15 @@ class Asteroid:
         return False
 
     def draw(self):
-        pygame.draw.circle(self.screen, red, (self.x, self.y), self.size)
+        if 20 <= self.size < 30:
+            self.screen.blit(load_image(self.random_image_asteroid(25), size=25, colorkey=-1), (self.x, self.y))
+        if 30 <= self.size < 40:
+            self.screen.blit(load_image(self.random_image_asteroid(35), size=35, colorkey=-1), (self.x, self.y))
+        if 40 <= self.size <= 50:
+            self.screen.blit(load_image(self.random_image_asteroid(45), size=45, colorkey=-1), (self.x, self.y))
+
+    def damage(self, dam):
+        self.health = self.health - dam
 
 
 class Turret:
