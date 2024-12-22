@@ -91,7 +91,6 @@ class MainScene:
 class Asteroid(pygame.sprite.Sprite):
     def __init__(self, screen):
         super().__init__()
-        self.image = load_image("Круглый астреоид на белом фоне.png")
         self.screen = screen
         self.size = random.randint(20, 50)
         self.x = random.randint(0, width - self.size)
@@ -106,7 +105,12 @@ class Asteroid(pygame.sprite.Sprite):
         return False
 
     def draw(self):
-        pygame.draw.circle(self.screen, red, (self.x, self.y), self.size)
+        if 20 <= self.size < 30:
+            self.screen.blit(load_image("Круглый астреоид на белом фоне_25.png", size=25), (self.x, self.y))
+        if 30 <= self.size < 40:
+            self.screen.blit(load_image("Круглый астреоид на белом фоне_35.png", size=35), (self.x, self.y))
+        if 40 <= self.size <= 50:
+            self.screen.blit(load_image("Круглый астреоид на белом фоне_45.png", size=45), (self.x, self.y))
 
 
 class Turret:

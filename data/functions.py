@@ -3,8 +3,13 @@ import sys
 import pygame
 
 
-def load_image(name, colorkey=None):
-    fullname = os.path.join('images/asteroids', name)
+def load_image(name, size, colorkey=None):
+    if size == 25:
+        fullname = os.path.join('images/asteroids/size_25', name)
+    if size == 35:
+        fullname = os.path.join('images/asteroids/size_35', name)
+    if size == 45:
+        fullname = os.path.join('images/asteroids/size_45', name)
     if not os.path.isfile(fullname):
         print(f'Файл с изображением "{fullname}" не найден')
         sys.exit()
