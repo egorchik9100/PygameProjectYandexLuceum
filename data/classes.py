@@ -112,11 +112,11 @@ class Turret:
         self.x = width // 2
         self.y = height - 50
         self.angle = 90  # Начальный угол
-        self.speed = 5 # Скорость перемещения турели
+        self.speed = 5  # Скорость перемещения турели
 
     def update(self, dx):
-        self.x += dx * self.speed # Изменение координаты x
-        self.x = max(0, min(self.x, width)) # Ограничение движения по ширине экрана
+        self.x += dx * self.speed  # Изменение координаты x
+        self.x = max(0, min(self.x, width))  # Ограничение движения по ширине экрана
 
     def draw(self):
         # Рисуем турель (простая линия)
@@ -146,3 +146,33 @@ class Bullet(pygame.sprite.Sprite):
     def is_off_screen(self):
         return self.x < 0 or self.x > width or self.y < 0 or self.y > height
 
+
+class StartWindow():
+    pygame.init()
+
+    window = pygame.display.set_mode((800, 600))
+    pygame.display.set_caption("pygame game")
+    font = pygame.font.SysFont("Arial", 36)
+
+    def draw_button(self, text, x, y, width, height):
+        pygame.draw.rect(window, 'gray', (x, y, width, height))
+        pygame.draw.rect(window, 'black', (x, y, width, height), 3)
+
+        label = font.render(text, True, 'black')
+        text_rect = label.get_rect(center=(x + width // 2, y + height // 2))
+        window.blit(label, text_rect)
+
+    def main_menu(self):
+        while True:
+            window.fill('white')
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+            play_button = pygame.Rect(WIDTH // 2 - 150, HEIGHT // 2 - 50, 300, 50)
+            records_button = pygame.Rect(WIDTH // 2 - 150, HEIGHT // 2 + 20, 300, 50)
+            draw_button("Играть", play_button.x, play_button.y, play_button.width, play_button.height)
+            draw_button("Рекорды", records_button.x, records_button.y, records_button.width, records_button.height)
+
+            pygame.display.update()
