@@ -21,5 +21,5 @@ def load_image(name, size, colorkey=None):
             colorkey = image.get_at((0, 0))
         image.set_colorkey(colorkey)
     else:
-        image = image.convert_alpha()  # спользуется для добавления прозрачности к изображению
+        image = image.convert_alpha()  # используется для добавления прозрачности к изображению
     return image
