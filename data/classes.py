@@ -109,6 +109,10 @@ class StartWindow:
                 if event.type == pygame.QUIT:
                     running = False
                     return running
+                if event.type == pygame.MOUSEBUTTONUP:
+                    mouse_pos = pygame.mouse.get_pos()
+                    if play_button.collidepoint(mouse_pos):
+                        return "game"
 
             play_button = pygame.Rect(width // 2 - 150, height // 2 - 50, 300, 50)
             records_button = pygame.Rect(width // 2 - 150, height // 2 + 20, 300, 50)
@@ -134,7 +138,6 @@ class Asteroid(pygame.sprite.Sprite):
                           f"Астероид из блэндера_{num}.jpg",
                           f"Круглый астреоид на белом фоне_{num}.png"]
         return choice(self.image_rnd)
-
 
     def update(self):
         self.y += self.speed
