@@ -19,6 +19,7 @@ class MainScene:
         self.shoot_delay = 400
         self.last_shot_time = 0
         self.screen = screen
+        self.record = 0
 
     def run_game(self):
 
@@ -75,6 +76,8 @@ class MainScene:
                     if distance < asteroid.size:
                         self.asteroids.remove(asteroid)
                         self.bullets.remove(bullet)
+                        self.record += 1
+                        print(self.record)
                         break
 
             # Отрисовка
