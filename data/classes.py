@@ -132,12 +132,9 @@ class Asteroid(pygame.sprite.Sprite):
         self.speed = random.randint(2, 5)
         self.health = random.randint(20, 50)
         self.image_rnd = []
-
-    def random_image_asteroid(self, num):
-        self.image_rnd = [f"Астероид в космосе_{num}.jpg",
-                          f"Астероид из блэндера_{num}.jpg",
-                          f"Круглый астреоид на белом фоне_{num}.png"]
-        return choice(self.image_rnd)
+        self.image_ria_25, self.image_ria_35, self.image_ria_45 = ("Круглый астреоид на белом фоне_25.png",
+                                                                   "Астероид в космосе_35.jpg",
+                                                                   "Астероид из блэндера_45.jpg")
 
     def update(self):
         self.y += self.speed
@@ -147,11 +144,11 @@ class Asteroid(pygame.sprite.Sprite):
 
     def draw(self):
         if 20 <= self.size < 30:
-            self.screen.blit(load_image(self.random_image_asteroid(25), size=25, colorkey=-1), (self.x, self.y))
+            self.screen.blit(load_image(self.image_ria_25, size=25, colorkey=-1), (self.x, self.y))
         if 30 <= self.size < 40:
-            self.screen.blit(load_image(self.random_image_asteroid(35), size=35, colorkey=-1), (self.x, self.y))
+            self.screen.blit(load_image(self.image_ria_35, size=35, colorkey=-1), (self.x, self.y))
         if 40 <= self.size <= 50:
-            self.screen.blit(load_image(self.random_image_asteroid(45), size=45, colorkey=-1), (self.x, self.y))
+            self.screen.blit(load_image(self.image_ria_45, size=45, colorkey=-1), (self.x, self.y))
 
     def damage(self, dam):
         self.health = self.health - dam
