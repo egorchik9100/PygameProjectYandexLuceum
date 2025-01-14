@@ -23,3 +23,5 @@ def load_image(name, size, colorkey=None):
     else:
         image = image.convert_alpha()  # используется для добавления прозрачности к изображению
     return image
+
+
