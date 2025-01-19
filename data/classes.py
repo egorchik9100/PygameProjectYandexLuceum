@@ -21,6 +21,7 @@ class MainScene:
         self.last_shot_time = 0
         self.screen = screen
         self.paused = False
+        self.score = 0
 
     def run_game(self):
 
@@ -32,13 +33,14 @@ class MainScene:
 
         # Кнопка паузы
         pause_button_text = font.render("||", True, white)
-        pause_button_rect = pause_button_text.get_rect(topright=(width - 10, 10))
+        pause_button_rect = pause_button_text.get_rect(topright=(width - 10, 20))
 
         # Создание меню паузы
         self.menu = pygame_menu.Menu("Пауза", 200, 200, theme=pygame_menu.themes.THEME_BLUE)
         self.menu.add.button("Продолжить", self.resume_game)
         self.menu.add.button("Выйти", self.exit_game)
         self.menu.disable()  # Изначально меню паузы скрыто
+
 
         # Главный цикл игры
         running = True
@@ -96,21 +98,27 @@ class MainScene:
                         if distance < asteroid.size:
                             self.asteroids.remove(asteroid)
                             self.bullets.remove(bullet)
+                            self.score += 1
                             break
 
                 # Отрисовка
+                # Прямоугольник для счета
+                font_score = pygame.font.Font(None, 74)
+                text_score = font.render(f"Счёт: {self.score}", True, (100, 100, 100))
+                rect_score = text_score.get_rect(topright=(width - 50, 20))
                 self.screen.fill(black)
                 for asteroid in self.asteroids:
                     asteroid.draw()
                 self.turret.draw()
                 for bullet in self.bullets:
                     bullet.draw()
-                self.screen.blit(pause_button_text, pause_button_rect)
-                pygame.display.flip()
+                self.screen.blit(text_score, rect_score)  # вывод количества очков
+                self.screen.blit(pause_button_text, pause_button_rect)  # вывод кнопки паузы
+                pygame.display.flip()  # обновление экрана
                 clock.tick(60)
             else:
                 if not self.menu.is_enabled():
-                    self.screen.blit(pause_button_text, pause_button_rect)
+                    self.screen.blit(pause_button_text, pause_button_rect)  # вывод кнопки паузы
                     pygame.display.flip()
 
                 # Задержка для контроля FPS
@@ -169,12 +177,6 @@ class Asteroid(pygame.sprite.Sprite):
         self.health = random.randint(20, 50)
         self.image_rnd = []
 
-    def random_image_asteroid(self, num):
-        self.image_rnd = [f"Астероид в космосе_{num}.jpg",
-                          f"Астероид из блэндера_{num}.jpg",
-                          f"Круглый астреоид на белом фоне_{num}.png"]
-        return choice(self.image_rnd)
-
     def update(self):
         self.y += self.speed
         if self.y > height:
@@ -183,11 +185,11 @@ class Asteroid(pygame.sprite.Sprite):
 
     def draw(self):
         if 20 <= self.size < 30:
-            self.screen.blit(load_image(self.random_image_asteroid(25), size=25, colorkey=-1), (self.x, self.y))
+            self.screen.blit(load_image("Круглый астреоид на белом фоне_25.png", size=25, colorkey=-1), (self.x, self.y))
         if 30 <= self.size < 40:
-            self.screen.blit(load_image(self.random_image_asteroid(35), size=35, colorkey=-1), (self.x, self.y))
+            self.screen.blit(load_image("Астероид в космосе_35.jpg", size=35, colorkey=-1), (self.x, self.y))
         if 40 <= self.size <= 50:
-            self.screen.blit(load_image(self.random_image_asteroid(45), size=45, colorkey=-1), (self.x, self.y))
+            self.screen.blit(load_image("Астероид из блэндера_45.jpg", size=45, colorkey=-1), (self.x, self.y))
 
     def damage(self, dam):
         self.health = self.health - dam
