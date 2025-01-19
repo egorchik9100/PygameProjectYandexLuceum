@@ -4,16 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="В классе добавлен метод damage для считывания урона и метод random_image_asteroid для выбора случайного изображения в зависимости от размера, а также начат метод draw который ставит изображения в зависимости от размера">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="Добавлен: вывод счета, коментарии, имя игры">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/functions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -50,15 +56,19 @@
   "keyToString": {
     "Python.classes.executor": "Run",
     "Python.code (2).executor": "Run",
+    "Python.help_gpt.executor": "Run",
     "Python.main.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "andrey-belikov",
-    "last_opened_file_path": "C:/Users/user/PycharmProjects/PygameProjectYandexLuceum",
+    "last_opened_file_path": "C:/Users/user/PycharmProjects/PygameProjectYandexLuceum/images/starships/size_45",
     "settings.editor.selected.configurable": "preferences.lookFeel"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\user\PycharmProjects\PygameProjectYandexLuceum\images\starships\size_45" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\user\PycharmProjects\PygameProjectYandexLuceum\images\asteroids" />
     </key>
@@ -164,7 +174,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734875431260</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Добавлен: вывод счета, коментарии, имя игры">
+      <option name="closed" value="true" />
+      <created>1737297621012</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1737297621012</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -187,6 +205,7 @@
     <MESSAGE value="В классе добавлена переменная с изображением" />
     <MESSAGE value="В классе добавлен метод рисования которй в зависимости от размера астероида ставит картинку определенного размера" />
     <MESSAGE value="В классе добавлен метод damage для считывания урона и метод random_image_asteroid для выбора случайного изображения в зависимости от размера, а также начат метод draw который ставит изображения в зависимости от размера" />
-    <option name="LAST_COMMIT_MESSAGE" value="В классе добавлен метод damage для считывания урона и метод random_image_asteroid для выбора случайного изображения в зависимости от размера, а также начат метод draw который ставит изображения в зависимости от размера" />
+    <MESSAGE value="Добавлен: вывод счета, коментарии, имя игры" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавлен: вывод счета, коментарии, имя игры" />
   </component>
 </project>

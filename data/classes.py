@@ -73,6 +73,7 @@ class MainScene:
                                                self.turret.angle, self.screen, 1))
                     self.can_shoot = False  # Запрещаем стрельбу
                     self.last_shot_time = current_time  # Обновляем время последнего выстрела
+
                 # Разрешаем стрельбу
                 if not self.can_shoot and current_time - self.last_shot_time > self.shoot_delay:
                     self.can_shoot = True
@@ -81,6 +82,7 @@ class MainScene:
                 for asteroid in self.asteroids[:]:
                     if asteroid.update():
                         self.asteroids.remove(asteroid)
+
                 # Добавляем новые астероиды (для постоянной игры)
                 if random.random() < 0.05:
                     self.asteroids.append(Asteroid(self.screen))
@@ -106,19 +108,20 @@ class MainScene:
                 font_score = pygame.font.Font(None, 74)
                 text_score = font.render(f"Счёт: {self.score}", True, (100, 100, 100))
                 rect_score = text_score.get_rect(topright=(width - 50, 20))
+
                 self.screen.fill(black)
                 for asteroid in self.asteroids:
                     asteroid.draw()
                 self.turret.draw()
                 for bullet in self.bullets:
                     bullet.draw()
-                self.screen.blit(text_score, rect_score)  # вывод количества очков
-                self.screen.blit(pause_button_text, pause_button_rect)  # вывод кнопки паузы
-                pygame.display.flip()  # обновление экрана
+                self.screen.blit(text_score, rect_score)  # Вывод количества очков
+                self.screen.blit(pause_button_text, pause_button_rect)  # Вывод кнопки паузы
+                pygame.display.flip()  # Обновление экрана
                 clock.tick(60)
             else:
                 if not self.menu.is_enabled():
-                    self.screen.blit(pause_button_text, pause_button_rect)  # вывод кнопки паузы
+                    self.screen.blit(pause_button_text, pause_button_rect)  # Вывод кнопки паузы
                     pygame.display.flip()
 
                 # Задержка для контроля FPS
@@ -175,7 +178,6 @@ class Asteroid(pygame.sprite.Sprite):
         self.y = -self.size
         self.speed = random.randint(2, 5)
         self.health = random.randint(20, 50)
-        self.image_rnd = []
 
     def update(self):
         self.y += self.speed
@@ -185,11 +187,11 @@ class Asteroid(pygame.sprite.Sprite):
 
     def draw(self):
         if 20 <= self.size < 30:
-            self.screen.blit(load_image("Круглый астреоид на белом фоне_25.png", size=25, colorkey=-1), (self.x, self.y))
+            self.screen.blit(load_image("asteroids/size_25/Круглый астреоид на белом фоне_25.png", colorkey=-1), (self.x, self.y))
         if 30 <= self.size < 40:
-            self.screen.blit(load_image("Астероид в космосе_35.jpg", size=35, colorkey=-1), (self.x, self.y))
+            self.screen.blit(load_image("asteroids/size_35/Астероид в космосе_35.jpg", colorkey=-1), (self.x, self.y))
         if 40 <= self.size <= 50:
-            self.screen.blit(load_image("Астероид из блэндера_45.jpg", size=45, colorkey=-1), (self.x, self.y))
+            self.screen.blit(load_image("asteroids/size_45/Астероид из блэндера_45.jpg", colorkey=-1), (self.x, self.y))
 
     def damage(self, dam):
         self.health = self.health - dam
@@ -202,17 +204,28 @@ class Turret:
         self.y = height - 50
         self.angle = 90  # Начальный угол
         self.speed = 5  # Скорость перемещения турели
+        self.keys = keys = pygame.key.get_pressed()
+        self.flag_turret = 1
+        self.img_turret = "starships/size_45/white_level1 100x57-no-bg-preview (carve.photos).png"
 
     def update(self, dx):
         self.x += dx * self.speed  # Изменение координаты x
         self.x = max(0, min(self.x, width))  # Ограничение движения по ширине экрана
 
+
     def draw(self):
-        # Рисуем турель (простая линия)
-        pygame.draw.line(self.screen, white, (self.x, self.y),
-                         (self.x + 50 * math.cos(math.radians(self.angle)),
-                          self.y - 50 * math.sin(math.radians(self.angle))), 5)
-        pygame.draw.circle(self.screen, white, (self.x, self.y), 10)  # Основа турели
+        if self.flag_turret == 0:
+            # Рисуем турель (простая линия)
+            pygame.draw.line(self.screen, white, (self.x, self.y),
+                             (self.x + 50 * math.cos(math.radians(self.angle)),
+                              self.y - 50 * math.sin(math.radians(self.angle))), 5)
+            pygame.draw.circle(self.screen, white, (self.x, self.y), 10)  # Основа турели
+        elif self.flag_turret == 1:
+            self.screen.blit(load_image(self.img_turret), (self.x, self.y))
+        # Управление турелью
+        if self.keys[pygame.K_9]:
+            print("change startship - okey)")
+            self.img_turret = "starships/size_150/white_level1 100x57-no-bg-preview (carve.photos).png"
 
 
 class Bullet(pygame.sprite.Sprite):
