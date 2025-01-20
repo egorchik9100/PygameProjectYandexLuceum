@@ -212,7 +212,6 @@ class Turret:
         self.x += dx * self.speed  # Изменение координаты x
         self.x = max(0, min(self.x, width))  # Ограничение движения по ширине экрана
 
-
     def draw(self):
         if self.flag_turret == 0:
             # Рисуем турель (простая линия)
@@ -233,7 +232,7 @@ class Bullet(pygame.sprite.Sprite):
         super().__init__()
         self.force = force
         self.screen = screen
-        self.x = x
+        self.x = x + 50
         self.y = y
         self.angle = math.radians(angle)  # Преобразование угла в радианы
         self.speed = 10

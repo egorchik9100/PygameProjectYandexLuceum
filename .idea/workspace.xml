@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="Добавлен: вывод счета, коментарии, имя игры">
+    <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="Добалвены отредактированные фотографии космолета, в процессе создания чит-кодов">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/functions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +60,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "andrey-belikov",
-    "last_opened_file_path": "C:/Users/user/PycharmProjects/PygameProjectYandexLuceum/images/starships/size_45",
+    "last_opened_file_path": "C:/Users/user/PycharmProjects/PygameProjectYandexLuceum",
     "settings.editor.selected.configurable": "preferences.lookFeel"
   }
 }]]></component>
@@ -105,7 +104,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-50da183f06c8-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.13135.95" />
+        <option value="bundled-python-sdk-d7ad00fb9fc3-c546a90a8094-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.23726.102" />
       </set>
     </attachedChunks>
   </component>
@@ -182,7 +181,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737297621012</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Добалвены отредактированные фотографии космолета, в процессе создания чит-кодов">
+      <option name="closed" value="true" />
+      <created>1737302046203</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1737302046203</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -206,6 +213,7 @@
     <MESSAGE value="В классе добавлен метод рисования которй в зависимости от размера астероида ставит картинку определенного размера" />
     <MESSAGE value="В классе добавлен метод damage для считывания урона и метод random_image_asteroid для выбора случайного изображения в зависимости от размера, а также начат метод draw который ставит изображения в зависимости от размера" />
     <MESSAGE value="Добавлен: вывод счета, коментарии, имя игры" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавлен: вывод счета, коментарии, имя игры" />
+    <MESSAGE value="Добалвены отредактированные фотографии космолета, в процессе создания чит-кодов" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добалвены отредактированные фотографии космолета, в процессе создания чит-кодов" />
   </component>
 </project>
