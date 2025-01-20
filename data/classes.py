@@ -21,6 +21,7 @@ class MainScene:
         self.last_shot_time = 0
         self.screen = screen
         self.paused = False
+        self.in_game = True
 
     def run_game(self):
 
@@ -44,6 +45,8 @@ class MainScene:
         running = True
         clock = pygame.time.Clock()
         while running:
+            if self.in_game is False:
+                return 'menu'
             current_time = pygame.time.get_ticks()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -121,7 +124,8 @@ class MainScene:
         self.menu.disable()
 
     def exit_game(self):
-        pass
+        self.in_game = False
+        self.menu.disable()
 
 
 class StartWindow:
