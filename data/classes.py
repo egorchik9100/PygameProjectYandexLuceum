@@ -71,8 +71,8 @@ class MainScene:
 
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_SPACE] and self.can_shoot and current_time - self.last_shot_time > self.shoot_delay:
-                    self.bullets.append(Bullet(self.turret.x + 50 * math.cos(math.radians(self.turret.angle)),
-                                               self.turret.y - 50 * math.sin(math.radians(self.turret.angle)),
+                    self.bullets.append(Bullet(self.turret.x,
+                                               self.turret.y,
                                                self.turret.angle, self.screen, 1))
                     self.can_shoot = False  # Запрещаем стрельбу
                     self.last_shot_time = current_time  # Обновляем время последнего выстрела
