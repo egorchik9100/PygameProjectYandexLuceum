@@ -101,9 +101,13 @@ class MainScene:
                     for asteroid in self.asteroids[:]:
                         distance = math.dist((bullet.x, bullet.y), (asteroid.x, asteroid.y))
                         if distance < asteroid.size:
-                            self.asteroids.remove(asteroid)
+                            asteroid_hp = asteroid.health
+                            if asteroid_hp - 10 == 0:
+                                self.asteroids.remove(asteroid)
+                                self.score += 1
+                            else:
+                                asteroid.health -= 10
                             self.bullets.remove(bullet)
-                            self.score += 1
                             break
 
                 # Отрисовка
@@ -181,7 +185,8 @@ class Asteroid(pygame.sprite.Sprite):
         self.x = random.randint(0, width - self.size)
         self.y = -self.size
         self.speed = random.randint(2, 5)
-        self.health = random.randint(20, 50)
+        self.health = random.choice([10, 20, 30, 40, 50])
+        self.max_health = self.health
 
     def update(self):
         self.y += self.speed
@@ -196,6 +201,8 @@ class Asteroid(pygame.sprite.Sprite):
             self.screen.blit(load_image("asteroids/size_35/Астероид в космосе_35.jpg", colorkey=-1), (self.x, self.y))
         if 40 <= self.size <= 50:
             self.screen.blit(load_image("asteroids/size_45/Астероид из блэндера_45.jpg", colorkey=-1), (self.x, self.y))
+        cords = (self.x, self.y - 5, self.health / self.max_health * self.size, 5)
+        pygame.draw.rect(self.screen, 'green', cords)
 
     def damage(self, dam):
         self.health = self.health - dam
