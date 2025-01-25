@@ -1,6 +1,6 @@
 import math
 import random
-from data.functions import load_image
+from data.functions import load_image, music_crash_asteroid
 import pygame
 from random import choice
 import pygame_menu
@@ -45,6 +45,8 @@ class MainScene:
 
 
         # Главный цикл игры
+        pygame.mixer.music.load("sounds/For_game.mp3")
+        pygame.mixer.music.play(-1)
         running = True
         clock = pygame.time.Clock()
         while running:
@@ -70,7 +72,6 @@ class MainScene:
                     self.turret.update(-1)
                 if keys[pygame.K_RIGHT]:
                     self.turret.update(1)
-                # Управление турелью
                 if keys[pygame.K_9]:
                     num_of_ship = 9
                 if keys[pygame.K_1]:
@@ -113,16 +114,17 @@ class MainScene:
                             asteroid_hp = asteroid.health
                             self.score += 0.5
                             if asteroid_hp - 10 == 0:
+                                music_crash_asteroid(flag=1)
                                 self.asteroids.remove(asteroid)
                                 self.score += 2
                             else:
+                                music_crash_asteroid(flag=0)
                                 asteroid.health -= 10
                             self.bullets.remove(bullet)
                             break
 
                 # Отрисовка
                 # Прямоугольник для счета
-                font_score = pygame.font.Font(None, 74)
                 text_score = font.render(f"Счёт: {int(self.score)}", True, (100, 100, 100))
                 rect_score = text_score.get_rect(topright=(width - 50, 20))
 
@@ -234,11 +236,13 @@ class Turret:
                 self.x += dx * self.speed - 3# Изменение координаты x, есди пользователь нажал кнопку <-
             else:
                 self.x += dx * self.speed + 3 # Изменение координаты x, есди пользователь нажал кнопку ->
-        else:
-            self.x += dx * self.speed  # Изменение координаты x
-        self.x = max(0, min(self.x, width))  # Ограничение движения по ширине экрана
-
-
+            self.x = max(0, min(self.x, 736))  # Ограничение движения по ширине экрана
+        if num_of_ship == 0 or num_of_ship == 1:
+            self.x += dx * self.speed
+            self.x = max(0, min(self.x, 741))  # Ограничение движения по ширине экрана
+        if num_of_ship == 9:
+            self.x += dx * self.speed
+            self.x = max(0, min(self.x, 755))  # Ограничение движения по ширине экрана
 
     def draw(self):
         if self.flag_turret == 0:
@@ -264,6 +268,7 @@ class Bullet(pygame.sprite.Sprite):
         super().__init__()
         self.force = force
         self.screen = screen
+
         global num_of_ship
         if num_of_ship == 9:
             self.x = x + 22
