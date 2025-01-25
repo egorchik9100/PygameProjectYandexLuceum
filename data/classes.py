@@ -9,6 +9,7 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 red = (255, 0, 0)
 width, height = 800, 600
+num_of_ship = 0
 
 
 class MainScene:
@@ -68,6 +69,10 @@ class MainScene:
                     self.turret.update(-1)
                 if keys[pygame.K_RIGHT]:
                     self.turret.update(1)
+                # Управление турелью
+                if keys[pygame.K_9]:
+                    global num_of_ship
+                    num_of_ship = 9
 
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_SPACE] and self.can_shoot and current_time - self.last_shot_time > self.shoot_delay:
@@ -215,13 +220,21 @@ class Turret:
         self.y = height - 50
         self.angle = 90  # Начальный угол
         self.speed = 5  # Скорость перемещения турели
-        self.keys = keys = pygame.key.get_pressed()
         self.flag_turret = 1
-        self.img_turret = "starships/size_45/white_level1 100x57-no-bg-preview (carve.photos).png"
+        self.img_turret = "starships/size_45/white_level1 100x56-no-bg-preview (carve.photos).png"
+
 
     def update(self, dx):
         self.x += dx * self.speed  # Изменение координаты x
         self.x = max(0, min(self.x, width))  # Ограничение движения по ширине экрана
+
+    def change_skin_starship(self):
+        global num_of_ship
+        if num_of_ship == 9:
+            return "starships/size_150/yellow 150.png"
+        else:
+            return "starships/size_45/white_level1 100x56-no-bg-preview (carve.photos).png"
+
 
     def draw(self):
         if self.flag_turret == 0:
@@ -230,12 +243,8 @@ class Turret:
                              (self.x + 50 * math.cos(math.radians(self.angle)),
                               self.y - 50 * math.sin(math.radians(self.angle))), 5)
             pygame.draw.circle(self.screen, white, (self.x, self.y), 10)  # Основа турели
-        elif self.flag_turret == 1:
-            self.screen.blit(load_image(self.img_turret), (self.x, self.y))
-        # Управление турелью
-        if self.keys[pygame.K_9]:
-            print("change startship - okey)")
-            self.img_turret = "starships/size_150/white_level1 100x57-no-bg-preview (carve.photos).png"
+        if self.flag_turret == 1:
+            self.screen.blit(load_image(self.change_skin_starship()), (self.x, self.y))
 
 
 class Bullet(pygame.sprite.Sprite):
