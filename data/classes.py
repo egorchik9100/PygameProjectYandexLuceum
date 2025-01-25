@@ -208,9 +208,9 @@ class Asteroid(pygame.sprite.Sprite):
         if 20 <= self.size < 30:
             self.screen.blit(load_image("asteroids/size_25/Круглый астреоид на белом фоне_25.png", colorkey=-1), (self.x, self.y))
         if 30 <= self.size < 40:
-            self.screen.blit(load_image("asteroids/size_35/Астероид в космосе_35.jpg", colorkey=-1), (self.x, self.y))
+            self.screen.blit(load_image("asteroids/size_35/Астероид в космосе_35_new.png", colorkey=-1), (self.x, self.y))
         if 40 <= self.size <= 50:
-            self.screen.blit(load_image("asteroids/size_45/Астероид из блэндера_45.jpg", colorkey=-1), (self.x, self.y))
+            self.screen.blit(load_image("asteroids/size_45/Астероид из блэндера_45_new.png", colorkey=-1), (self.x, self.y))
         cords = (self.x, self.y - 5, self.health / self.max_health * self.size, 5)
         pygame.draw.rect(self.screen, 'green', cords)
 
@@ -229,19 +229,15 @@ class Turret:
 
 
     def update(self, dx):
-        self.x += dx * self.speed  # Изменение координаты x
+        if num_of_ship == 8:
+            if dx < 0:
+                self.x += dx * self.speed - 3# Изменение координаты x, есди пользователь нажал кнопку <-
+            else:
+                self.x += dx * self.speed + 3 # Изменение координаты x, есди пользователь нажал кнопку ->
+        else:
+            self.x += dx * self.speed  # Изменение координаты x
         self.x = max(0, min(self.x, width))  # Ограничение движения по ширине экрана
 
-    def change_skin_starship(self):
-        global num_of_ship
-        if num_of_ship == 9:
-            return "starships/size_45/yellow 45x41.png"
-        if num_of_ship == 8:
-            return "starships/size_45/white_level11 60x60.png"
-        if num_of_ship == 1:
-            return "starships/size_45/white_level1 56x55-no-bg-preview.png"
-        else:
-            return "starships/size_45/white_level1 56x55-no-bg-preview.png"
 
 
     def draw(self):
@@ -252,7 +248,15 @@ class Turret:
                               self.y - 50 * math.sin(math.radians(self.angle))), 5)
             pygame.draw.circle(self.screen, white, (self.x, self.y), 10)  # Основа турели
         if self.flag_turret == 1:
-            self.screen.blit(load_image(self.change_skin_starship()), (self.x, self.y))
+            global num_of_ship
+            if num_of_ship == 9:
+                self.screen.blit(load_image("starships/size_45/yellow 45x41.png"), (self.x, self.y))
+            if num_of_ship == 8:
+                self.screen.blit(load_image("starships/size_45/white_level11 60x60.png"), (self.x, self.y))
+            if num_of_ship == 1:
+                self.screen.blit(load_image("starships/size_45/white_level1 56x55-no-bg-preview.png"), (self.x, self.y))
+            if num_of_ship == 0:
+                self.screen.blit(load_image("starships/size_45/white_level1 56x55-no-bg-preview.png"), (self.x, self.y))
 
 
 class Bullet(pygame.sprite.Sprite):
@@ -264,7 +268,7 @@ class Bullet(pygame.sprite.Sprite):
         if num_of_ship == 9:
             self.x = x + 22
         elif num_of_ship == 8:
-            self.x = x + 30
+            self.x = x + 26
         else:
             self.x = x + 28.5
         self.y = y
@@ -272,11 +276,20 @@ class Bullet(pygame.sprite.Sprite):
         self.speed = 10
 
     def update(self):
+        if num_of_ship == 8:
+            self.y -= self.speed * math.sin(self.angle) + 18 # Y убывает вверх
+        else:
+            self.y -= self.speed * math.sin(self.angle)  # Y убывает вверх
         self.x += self.speed * math.cos(self.angle)
-        self.y -= self.speed * math.sin(self.angle)  # Y убывает вверх
 
     def draw(self):
-        pygame.draw.circle(self.screen, white, (int(self.x), int(self.y)), 2)
+        if num_of_ship == 8:
+            if 0 <= self.y <= 39:  # проверка пули на отдaленность от турели, если от 0 до 39, то изображение круглой
+                self.screen.blit(load_image("bullet/bullet_new_after 9x16.png"), (self.x, self.y))
+            else:  # иначе более вытянутая, благодаря этому переходу кажется, что пуля увеличивает скорость(но уверяю, это не так)
+                self.screen.blit(load_image("bullet/bullet_before 9x25.png"), (self.x, self.y))
+        else:
+            pygame.draw.circle(self.screen, white, (int(self.x), int(self.y)), 2)
 
     def is_off_screen(self):
         return self.x < 0 or self.x > width or self.y < 0 or self.y > height
