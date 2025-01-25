@@ -63,6 +63,7 @@ class MainScene:
                             self.menu.mainloop(self.screen)
 
             if not self.paused:
+                global num_of_ship
                 # Управление турелью
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_LEFT]:
@@ -71,8 +72,11 @@ class MainScene:
                     self.turret.update(1)
                 # Управление турелью
                 if keys[pygame.K_9]:
-                    global num_of_ship
                     num_of_ship = 9
+                if keys[pygame.K_1]:
+                    num_of_ship = 1
+                if keys[pygame.K_8]:
+                    num_of_ship = 8
 
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_SPACE] and self.can_shoot and current_time - self.last_shot_time > self.shoot_delay:
@@ -107,9 +111,10 @@ class MainScene:
                         distance = math.dist((bullet.x, bullet.y), (asteroid.x, asteroid.y))
                         if distance < asteroid.size:
                             asteroid_hp = asteroid.health
+                            self.score += 0.5
                             if asteroid_hp - 10 == 0:
                                 self.asteroids.remove(asteroid)
-                                self.score += 1
+                                self.score += 2
                             else:
                                 asteroid.health -= 10
                             self.bullets.remove(bullet)
@@ -118,7 +123,7 @@ class MainScene:
                 # Отрисовка
                 # Прямоугольник для счета
                 font_score = pygame.font.Font(None, 74)
-                text_score = font.render(f"Счёт: {self.score}", True, (100, 100, 100))
+                text_score = font.render(f"Счёт: {int(self.score)}", True, (100, 100, 100))
                 rect_score = text_score.get_rect(topright=(width - 50, 20))
 
                 self.screen.fill(black)
@@ -217,11 +222,10 @@ class Turret:
     def __init__(self, screen):
         self.screen = screen
         self.x = width // 2
-        self.y = height - 50
+        self.y = height - 60
         self.angle = 90  # Начальный угол
         self.speed = 5  # Скорость перемещения турели
         self.flag_turret = 1
-        self.img_turret = "starships/size_45/white_level1 100x56-no-bg-preview (carve.photos).png"
 
 
     def update(self, dx):
@@ -231,9 +235,13 @@ class Turret:
     def change_skin_starship(self):
         global num_of_ship
         if num_of_ship == 9:
-            return "starships/size_150/yellow 150.png"
+            return "starships/size_45/yellow 45x41.png"
+        if num_of_ship == 8:
+            return "starships/size_45/white_level11 60x60.png"
+        if num_of_ship == 1:
+            return "starships/size_45/white_level1 56x55-no-bg-preview.png"
         else:
-            return "starships/size_45/white_level1 100x56-no-bg-preview (carve.photos).png"
+            return "starships/size_45/white_level1 56x55-no-bg-preview.png"
 
 
     def draw(self):
@@ -252,7 +260,13 @@ class Bullet(pygame.sprite.Sprite):
         super().__init__()
         self.force = force
         self.screen = screen
-        self.x = x + 50
+        global num_of_ship
+        if num_of_ship == 9:
+            self.x = x + 22
+        elif num_of_ship == 8:
+            self.x = x + 30
+        else:
+            self.x = x + 28.5
         self.y = y
         self.angle = math.radians(angle)  # Преобразование угла в радианы
         self.speed = 10
