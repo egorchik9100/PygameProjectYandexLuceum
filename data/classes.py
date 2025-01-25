@@ -9,6 +9,7 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 red = (255, 0, 0)
 width, height = 800, 600
+num_of_ship = 0
 
 
 class MainScene:
@@ -62,12 +63,20 @@ class MainScene:
                             self.menu.mainloop(self.screen)
 
             if not self.paused:
+                global num_of_ship
                 # Управление турелью
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_LEFT]:
                     self.turret.update(-1)
                 if keys[pygame.K_RIGHT]:
                     self.turret.update(1)
+                # Управление турелью
+                if keys[pygame.K_9]:
+                    num_of_ship = 9
+                if keys[pygame.K_1]:
+                    num_of_ship = 1
+                if keys[pygame.K_8]:
+                    num_of_ship = 8
 
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_SPACE] and self.can_shoot and current_time - self.last_shot_time > self.shoot_delay:
@@ -102,9 +111,10 @@ class MainScene:
                         distance = math.dist((bullet.x, bullet.y), (asteroid.x, asteroid.y))
                         if distance < asteroid.size:
                             asteroid_hp = asteroid.health
+                            self.score += 0.5
                             if asteroid_hp - 10 == 0:
                                 self.asteroids.remove(asteroid)
-                                self.score += 1
+                                self.score += 2
                             else:
                                 asteroid.health -= 10
                             self.bullets.remove(bullet)
@@ -113,7 +123,7 @@ class MainScene:
                 # Отрисовка
                 # Прямоугольник для счета
                 font_score = pygame.font.Font(None, 74)
-                text_score = font.render(f"Счёт: {self.score}", True, (100, 100, 100))
+                text_score = font.render(f"Счёт: {int(self.score)}", True, (100, 100, 100))
                 rect_score = text_score.get_rect(topright=(width - 50, 20))
 
                 self.screen.fill(black)
@@ -198,9 +208,9 @@ class Asteroid(pygame.sprite.Sprite):
         if 20 <= self.size < 30:
             self.screen.blit(load_image("asteroids/size_25/Круглый астреоид на белом фоне_25.png", colorkey=-1), (self.x, self.y))
         if 30 <= self.size < 40:
-            self.screen.blit(load_image("asteroids/size_35/Астероид в космосе_35.jpg", colorkey=-1), (self.x, self.y))
+            self.screen.blit(load_image("asteroids/size_35/Астероид в космосе_35_new.png", colorkey=-1), (self.x, self.y))
         if 40 <= self.size <= 50:
-            self.screen.blit(load_image("asteroids/size_45/Астероид из блэндера_45.jpg", colorkey=-1), (self.x, self.y))
+            self.screen.blit(load_image("asteroids/size_45/Астероид из блэндера_45_new.png", colorkey=-1), (self.x, self.y))
         cords = (self.x, self.y - 5, self.health / self.max_health * self.size, 5)
         pygame.draw.rect(self.screen, 'green', cords)
 
@@ -212,16 +222,23 @@ class Turret:
     def __init__(self, screen):
         self.screen = screen
         self.x = width // 2
-        self.y = height - 50
+        self.y = height - 60
         self.angle = 90  # Начальный угол
         self.speed = 5  # Скорость перемещения турели
-        self.keys = keys = pygame.key.get_pressed()
         self.flag_turret = 1
-        self.img_turret = "starships/size_45/white_level1 100x57-no-bg-preview (carve.photos).png"
+
 
     def update(self, dx):
-        self.x += dx * self.speed  # Изменение координаты x
+        if num_of_ship == 8:
+            if dx < 0:
+                self.x += dx * self.speed - 3# Изменение координаты x, есди пользователь нажал кнопку <-
+            else:
+                self.x += dx * self.speed + 3 # Изменение координаты x, есди пользователь нажал кнопку ->
+        else:
+            self.x += dx * self.speed  # Изменение координаты x
         self.x = max(0, min(self.x, width))  # Ограничение движения по ширине экрана
+
+
 
     def draw(self):
         if self.flag_turret == 0:
@@ -230,12 +247,16 @@ class Turret:
                              (self.x + 50 * math.cos(math.radians(self.angle)),
                               self.y - 50 * math.sin(math.radians(self.angle))), 5)
             pygame.draw.circle(self.screen, white, (self.x, self.y), 10)  # Основа турели
-        elif self.flag_turret == 1:
-            self.screen.blit(load_image(self.img_turret), (self.x, self.y))
-        # Управление турелью
-        if self.keys[pygame.K_9]:
-            print("change startship - okey)")
-            self.img_turret = "starships/size_150/white_level1 100x57-no-bg-preview (carve.photos).png"
+        if self.flag_turret == 1:
+            global num_of_ship
+            if num_of_ship == 9:
+                self.screen.blit(load_image("starships/size_45/yellow 45x41.png"), (self.x, self.y))
+            if num_of_ship == 8:
+                self.screen.blit(load_image("starships/size_45/white_level11 60x60.png"), (self.x, self.y))
+            if num_of_ship == 1:
+                self.screen.blit(load_image("starships/size_45/white_level1 56x55-no-bg-preview.png"), (self.x, self.y))
+            if num_of_ship == 0:
+                self.screen.blit(load_image("starships/size_45/white_level1 56x55-no-bg-preview.png"), (self.x, self.y))
 
 
 class Bullet(pygame.sprite.Sprite):
@@ -243,17 +264,32 @@ class Bullet(pygame.sprite.Sprite):
         super().__init__()
         self.force = force
         self.screen = screen
-        self.x = x + 50
+        global num_of_ship
+        if num_of_ship == 9:
+            self.x = x + 22
+        elif num_of_ship == 8:
+            self.x = x + 26
+        else:
+            self.x = x + 28.5
         self.y = y
         self.angle = math.radians(angle)  # Преобразование угла в радианы
         self.speed = 10
 
     def update(self):
+        if num_of_ship == 8:
+            self.y -= self.speed * math.sin(self.angle) + 18 # Y убывает вверх
+        else:
+            self.y -= self.speed * math.sin(self.angle)  # Y убывает вверх
         self.x += self.speed * math.cos(self.angle)
-        self.y -= self.speed * math.sin(self.angle)  # Y убывает вверх
 
     def draw(self):
-        pygame.draw.circle(self.screen, white, (int(self.x), int(self.y)), 2)
+        if num_of_ship == 8:
+            if 0 <= self.y <= 39:  # проверка пули на отдaленность от турели, если от 0 до 39, то изображение круглой
+                self.screen.blit(load_image("bullet/bullet_new_after 9x16.png"), (self.x, self.y))
+            else:  # иначе более вытянутая, благодаря этому переходу кажется, что пуля увеличивает скорость(но уверяю, это не так)
+                self.screen.blit(load_image("bullet/bullet_before 9x25.png"), (self.x, self.y))
+        else:
+            pygame.draw.circle(self.screen, white, (int(self.x), int(self.y)), 2)
 
     def is_off_screen(self):
         return self.x < 0 or self.x > width or self.y < 0 or self.y > height
