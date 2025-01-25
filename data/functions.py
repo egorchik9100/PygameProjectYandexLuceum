@@ -20,3 +20,8 @@ def load_image(name, colorkey=None):
     return image
 
 
+def music_crash_asteroid(flag=None):
+    if flag == 1:
+        pygame.mixer.Sound("sounds/Crash_ston.mp3").play()
+    if flag == 0:
+        pygame.mixer.Sound("sounds/hit_asteroid.mp3").play()
