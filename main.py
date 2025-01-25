@@ -3,7 +3,6 @@ from data.classes import MainScene, StartWindow
 
 
 def main():
-    # Инициализация Pygame
     pygame.init()
 
     # Размеры окна
