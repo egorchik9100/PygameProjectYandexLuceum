@@ -72,12 +72,15 @@ class MainScene:
                     self.turret.update(-1)
                 if keys[pygame.K_RIGHT]:
                     self.turret.update(1)
-                if keys[pygame.K_9]:
+                # Чит коды
+                if keys[pygame.K_9]:  # при нажимании кнопки 9, текущий корабль сменяется на 9
                     num_of_ship = 9
-                if keys[pygame.K_1]:
+                if keys[pygame.K_1]:  # при нажимании кнопки 9, текущий корабль сменяется на 1(начальный)
                     num_of_ship = 1
-                if keys[pygame.K_8]:
+                if keys[pygame.K_8]:  # при нажимании кнопки 9, текущий корабль сменяется на 8
                     num_of_ship = 8
+                if self.score >= 112:  # когда игрок достигает 112 очков и больше, его корабль сменяется на 9.
+                    num_of_ship = 9
 
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_SPACE] and self.can_shoot and current_time - self.last_shot_time > self.shoot_delay:
@@ -190,6 +193,47 @@ class StartWindow:
 
 
 class Asteroid(pygame.sprite.Sprite):
+    def __init__(self, screen):
+        super().__init__()
+        self.screen = screen
+        self.size = random.randint(20, 50)
+        self.x = random.randint(0, width - self.size)
+        self.y = -self.size
+        self.speed = random.randint(2, 5)
+        self.health = random.choice([10, 20, 30, 40, 50])
+        self.max_health = self.health
+
+    def update(self):
+        self.y += self.speed
+        if self.y > height:
+            return True  # Удаляем астероид, если он вышел за экран
+        return False
+
+    def draw(self):
+        if 20 <= self.size < 30:
+            self.screen.blit(load_image("asteroids/size_25/Круглый астреоид на белом фоне_25.png", colorkey=-1), (self.x, self.y))
+        if 30 <= self.size < 40:
+            self.screen.blit(load_image("asteroids/size_35/Астероид в космосе_35_new.png", colorkey=-1), (self.x, self.y))
+        if 40 <= self.size <= 50:
+            self.screen.blit(load_image("asteroids/size_45/Астероид из блэндера_45_new.png", colorkey=-1), (self.x, self.y))
+        cords = (self.x, self.y - 5, self.health / self.max_health * self.size, 5)
+        if self.max_health - self.health == 10:
+            pygame.draw.rect(self.screen, "yellow", cords)
+        if self.max_health - self.health == 20:
+            pygame.draw.rect(self.screen, "orange", cords)
+        if self.max_health - self.health == 30:
+            pygame.draw.rect(self.screen, (193, 97, 68), cords)
+        if self.health == 10:
+            pygame.draw.rect(self.screen, "red", cords)
+        if self.max_health - self.health == 0:
+            pygame.draw.rect(self.screen, "green", cords)
+
+
+    def damage(self, dam):
+        self.health = self.health - dam
+
+
+class Buff(pygame.sprite.Sprite):
     def __init__(self, screen):
         super().__init__()
         self.screen = screen
