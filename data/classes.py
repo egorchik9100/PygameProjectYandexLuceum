@@ -17,6 +17,10 @@ class MainScene:
         self.asteroids = []
         self.turret = Turret(screen)
         self.bullets = []
+        self.buffs_white = []  # список зелий, которые уничтожают астероиды на экране;
+        self.buffs_green = []  # список зелий, которые временно меняют корабль на 8;
+        self.buffs_blue = []  # список зелий, которые пополняют опыт;
+        self.buffs_red = []  # список зелий, которые восстанавливают здоровье;
         self.can_shoot = True
         self.shoot_delay = 400
         self.last_shot_time = 0
@@ -72,33 +76,59 @@ class MainScene:
                     self.turret.update(-1)
                 if keys[pygame.K_RIGHT]:
                     self.turret.update(1)
-                if keys[pygame.K_9]:
+                # Чит коды
+                if keys[pygame.K_9]:  # при нажимании кнопки 9, текущий корабль сменяется на 9;
                     num_of_ship = 9
-                if keys[pygame.K_1]:
+                if keys[pygame.K_1]:  # при нажимании кнопки 9, текущий корабль сменяется на 1(начальный);
                     num_of_ship = 1
-                if keys[pygame.K_8]:
+                if keys[pygame.K_8]:  # при нажимании кнопки 9, текущий корабль сменяется на 8;
                     num_of_ship = 8
+                if self.score >= 112:  # когда игрок достигает 112 очков и больше, его корабль сменяется на 9;
+                    num_of_ship = 9
 
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_SPACE] and self.can_shoot and current_time - self.last_shot_time > self.shoot_delay:
                     self.bullets.append(Bullet(self.turret.x,
                                                self.turret.y,
                                                self.turret.angle, self.screen, 1))
-                    self.can_shoot = False  # Запрещаем стрельбу
-                    self.last_shot_time = current_time  # Обновляем время последнего выстрела
+                    self.can_shoot = False  # Запрещаем стрельбу;
+                    self.last_shot_time = current_time  # Обновляем время последнего выстрела;
 
-                # Разрешаем стрельбу
+                # Разрешаем стрельбу;
                 if not self.can_shoot and current_time - self.last_shot_time > self.shoot_delay:
                     self.can_shoot = True
 
-                # Обновление астероидов и удаление тех, которые вышли за экран
+                # Обновление астероидов и удаление тех, которые вышли за экран;
                 for asteroid in self.asteroids[:]:
                     if asteroid.update():
                         self.asteroids.remove(asteroid)
 
-                # Добавляем новые астероиды (для постоянной игры)
+                # Обновление зелий и удаление тех, которые вышли за экран;
+                for buff_b in self.buffs_blue[:]:
+                    if buff_b.update():
+                        self.buffs_blue.remove(buff_b)
+                for buff_g in self.buffs_green[:]:
+                    if buff_g.update():
+                        self.buffs_green.remove(buff_g)
+                for buff_w in self.buffs_white[:]:
+                    if buff_w.update():
+                        self.buffs_white.remove(buff_w)
+                for buff_r in self.buffs_red[:]:
+                    if buff_r.update():
+                        self.buffs_red.remove(buff_r)
+
+                # Добавляем новые астероиды и зелья (для постоянной игры);
                 if random.random() < 0.05:
                     self.asteroids.append(Asteroid(self.screen))
+                if self.score > 90:
+                    if random.random() < 0.002:
+                        self.buffs_white.append(BuffWhite(self.screen))
+                    if random.random() < 0.002:
+                        self.buffs_red.append(BuffRed(self.screen))
+                    if random.random() < 0.002:
+                        self.buffs_blue.append(BuffBlue(self.screen))
+                    if random.random() < 0.002:
+                        self.buffs_green.append(BuffGreen(self.screen))
 
                 # Обновление и отрисовка пуль
                 for bullet in self.bullets[:]:
@@ -114,13 +144,54 @@ class MainScene:
                             asteroid_hp = asteroid.health
                             self.score += 0.5
                             if asteroid_hp - 10 == 0:
-                                music_crash_asteroid(flag=1)
+                                music_crash_asteroid(flag=1, thing="Asteroid")
                                 self.asteroids.remove(asteroid)
                                 self.score += 2
                             else:
-                                music_crash_asteroid(flag=0)
+                                music_crash_asteroid(flag=0, thing="Asteroid")
                                 asteroid.health -= 10
                             self.bullets.remove(bullet)
+                            break
+
+                    for buff_w in self.buffs_white[:]:
+                        distance = math.dist((bullet.x, bullet.y), (buff_w.x, buff_w.y))
+                        if distance < buff_w.size:
+                            try:
+                                self.buffs_white.remove(buff_w)
+                                self.bullets.remove(bullet)
+                            except Exception as er:
+                                print(er)
+                            break
+
+                    for buff_g in self.buffs_green[:]:
+                        distance = math.dist((bullet.x, bullet.y), (buff_g.x, buff_g.y))
+                        if distance < buff_g.size:
+                            try:
+                                self.buffs_green.remove(buff_g)
+                                self.bullets.remove(bullet)
+                            except Exception as er:
+                                print(er)
+                            break
+
+                    for buff_r in self.buffs_red[:]:
+                        distance = math.dist((bullet.x, bullet.y), (buff_r.x, buff_r.y))
+                        if distance < buff_r.size:
+                            try:
+                                self.buffs_red.remove(buff_r)
+                                self.bullets.remove(bullet)
+                            except Exception as er:
+                                print(er)
+                            break
+
+                    for buff_b in self.buffs_blue[:]:
+                        distance = math.dist((bullet.x, bullet.y), (buff_b.x, buff_b.y))
+                        if distance < buff_b.size:
+                            self.score += 100
+                            try:
+                                self.buffs_blue.remove(buff_b)
+                                self.bullets.remove(bullet)
+                            except Exception as er:
+                                print(er)
                             break
 
                 # Отрисовка
@@ -132,6 +203,14 @@ class MainScene:
                 for asteroid in self.asteroids:
                     asteroid.draw()
                 self.turret.draw()
+                for buff_w in self.buffs_white:
+                    buff_w.draw()
+                for buff_r in self.buffs_red:
+                    buff_r.draw()
+                for buff_g in self.buffs_green:
+                    buff_g.draw()
+                for buff_b in self.buffs_blue:
+                    buff_b.draw()
                 for bullet in self.bullets:
                     bullet.draw()
                 self.screen.blit(text_score, rect_score)  # Вывод количества очков
@@ -228,6 +307,86 @@ class Asteroid(pygame.sprite.Sprite):
 
     def damage(self, dam):
         self.health = self.health - dam
+
+
+class BuffBlue(pygame.sprite.Sprite):
+    def __init__(self, screen):
+        super().__init__()
+        self.screen = screen
+        self.size = random.randint(20, 50)
+        self.x = random.randint(0, width - self.size)
+        self.y = -self.size
+        self.speed = 3
+        self.health = 10
+
+    def update(self):
+        self.y += self.speed
+        if self.y > height:
+            return True  # Удаляем зелье, если оно вышло за экран
+        return False
+
+    def draw(self):
+       self.screen.blit(load_image("buffs/blue_expir 20x32.png", colorkey=-1), (self.x, self.y))
+
+
+class BuffWhite(pygame.sprite.Sprite):
+    def __init__(self, screen):
+        super().__init__()
+        self.screen = screen
+        self.size = random.randint(20, 50)
+        self.x = random.randint(0, width - self.size)
+        self.y = -self.size
+        self.speed = 3
+        self.health = 10
+
+    def update(self):
+        self.y += self.speed
+        if self.y > height:
+            return True  # Удаляем зелье, если оно вышло за экран
+        return False
+
+    def draw(self):
+        self.screen.blit(load_image("buffs/white_alldamage 17x70.png", colorkey=-1), (self.x, self.y))
+
+
+class BuffRed(pygame.sprite.Sprite):
+    def __init__(self, screen):
+        super().__init__()
+        self.screen = screen
+        self.size = random.randint(20, 50)
+        self.x = random.randint(0, width - self.size)
+        self.y = -self.size
+        self.speed = 3
+        self.health = 10
+
+    def update(self):
+        self.y += self.speed
+        if self.y > height:
+            return True  # Удаляем зелье, если оно вышло за экран
+        return False
+
+    def draw(self):
+        self.screen.blit(load_image("buffs/red_hp 20x28.png", colorkey=-1), (self.x, self.y))
+
+
+class BuffGreen(pygame.sprite.Sprite):
+    def __init__(self, screen):
+        super().__init__()
+        self.screen = screen
+        self.size = random.randint(20, 50)
+        self.x = random.randint(0, width - self.size)
+        self.y = -self.size
+        self.speed = 3
+        self.health = 10
+
+    def update(self):
+        self.y += self.speed
+        if self.y > height:
+            return True  # Удаляем зелье, если оно вышло за экран
+        return False
+
+    def draw(self):
+        pass
 
 
 class Turret:
