@@ -1,6 +1,6 @@
 # Техническое задание
 
-1. Project Name: Универсальный планировщик
+1. Project Name: Gala game
 2. Authors:
     - Team Lead: Челноков Егор
     - Project Developers: Беликов Андрей, Советов Егор
