@@ -214,7 +214,17 @@ class Asteroid(pygame.sprite.Sprite):
         if 40 <= self.size <= 50:
             self.screen.blit(load_image("asteroids/size_45/Астероид из блэндера_45_new.png", colorkey=-1), (self.x, self.y))
         cords = (self.x, self.y - 5, self.health / self.max_health * self.size, 5)
-        pygame.draw.rect(self.screen, 'green', cords)
+        if self.max_health - self.health == 10:
+            pygame.draw.rect(self.screen, "yellow", cords)
+        if self.max_health - self.health == 20:
+            pygame.draw.rect(self.screen, "orange", cords)
+        if self.max_health - self.health == 30:
+            pygame.draw.rect(self.screen, (193, 97, 68), cords)
+        if self.health == 10:
+            pygame.draw.rect(self.screen, "red", cords)
+        if self.max_health - self.health == 0:
+            pygame.draw.rect(self.screen, "green", cords)
+
 
     def damage(self, dam):
         self.health = self.health - dam
