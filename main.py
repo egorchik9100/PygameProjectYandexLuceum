@@ -23,6 +23,8 @@ def main():
             if running == "menu":
                 current_scene = "menu"
     pygame.quit()
+    '''except Exception as er:
+        print(f"In main.py -> {er}")'''
 
 
 if __name__ == '__main__':
