@@ -26,8 +26,10 @@ class MainScene:
         self.last_shot_time = 0
         self.screen = screen
         self.paused = False
-        self.score = 100
-        self.score_flag = True
+        self.score = 0
+        self.score_music_1000 = True
+        self.score_flag = 0
+        self.buff_flag = True
         self.in_game = True
 
     def run_game(self):
@@ -84,7 +86,6 @@ class MainScene:
                     num_of_ship = 1
                 if keys[pygame.K_8]:  # при нажимании кнопки 9, текущий корабль сменяется на 8;
                     num_of_ship = 8
-                    print(f"in here: {num_of_ship}")
                 if self.score >= 112 and self.score_flag:  # когда игрок достигает 112 очков и больше, его корабль сменяется на 9;
                     num_of_ship = 9
                     self.score_flag = False
@@ -96,6 +97,11 @@ class MainScene:
                                                self.turret.angle, self.screen, 1))
                     self.can_shoot = False  # Запрещаем стрельбу;
                     self.last_shot_time = current_time  # Обновляем время последнего выстрела;
+
+                # Проигрываем музыку;
+                if self.score == 1000 and self.score_music_1000:
+                    self.score_music_1000 = False
+                    music_crash_asteroid(thing="level_up")
 
                 # Разрешаем стрельбу;
                 if not self.can_shoot and current_time - self.last_shot_time > self.shoot_delay:
@@ -124,14 +130,22 @@ class MainScene:
                 if random.random() < 0.05:
                     self.asteroids.append(Asteroid(self.screen))
                 if self.score > 90:
-                    if random.random() < 0.002:
-                        self.buffs_white.append(BuffWhite(self.screen))
-                    if random.random() < 0.002:
-                        self.buffs_red.append(BuffRed(self.screen))
-                    if random.random() < 0.002:
-                        self.buffs_blue.append(BuffBlue(self.screen))
-                    if random.random() < 0.002:
-                        self.buffs_green.append(BuffGreen(self.screen))
+                    if self.buff_flag <= 0:  # если флаг равен или меньше 0, то выполнить условие
+                        if random.random() < 0.0002:
+                            self.buffs_white.append(BuffWhite(self.screen))
+                            self.buff_flag = 10  # как только выполняется условие флаг становитс равен 10
+                        if random.random() < 0.0002:
+                            self.buffs_red.append(BuffRed(self.screen))
+                            self.buff_flag = 10
+                        if random.random() < 0.0002:
+                            self.buffs_blue.append(BuffBlue(self.screen))
+                            self.buff_flag = 10
+                        if random.random() < 0.0002:
+                            self.buffs_green.append(BuffGreen(self.screen))
+                            self.buff_flag = 10
+                    if random.random() < 0.002:  # теперь со случайной вероятностью постепенно уменьшаем флаг с 10 до 0;
+                        # вероятность используям, как альтернативу таймера для зелья;
+                        self.buff_flag -= 1
 
                 # Обновление и отрисовка пуль
                 for bullet in self.bullets[:]:
@@ -160,6 +174,7 @@ class MainScene:
                         distance = math.dist((bullet.x, bullet.y), (buff_w.x, buff_w.y))
                         if distance < buff_w.size:
                             try:
+                                self.buff_flag = False
                                 self.buffs_white.remove(buff_w)
                                 self.bullets.remove(bullet)
                             except Exception as er:
@@ -170,6 +185,7 @@ class MainScene:
                         distance = math.dist((bullet.x, bullet.y), (buff_g.x, buff_g.y))
                         if distance < buff_g.size:
                             try:
+                                self.buff_flag = False
                                 self.buffs_green.remove(buff_g)
                                 self.bullets.remove(bullet)
                             except Exception as er:
@@ -180,6 +196,7 @@ class MainScene:
                         distance = math.dist((bullet.x, bullet.y), (buff_r.x, buff_r.y))
                         if distance < buff_r.size:
                             try:
+                                self.buff_flag = False
                                 self.buffs_red.remove(buff_r)
                                 self.bullets.remove(bullet)
                             except Exception as er:
@@ -191,6 +208,8 @@ class MainScene:
                         if distance < buff_b.size:
                             self.score += 100
                             try:
+                                music_crash_asteroid(thing="buff")
+                                self.buff_flag = False
                                 self.buffs_blue.remove(buff_b)
                                 self.bullets.remove(bullet)
                             except Exception as er:
@@ -425,7 +444,6 @@ class Turret:
             pygame.draw.circle(self.screen, white, (self.x, self.y), 10)  # Основа турели
         if self.flag_turret == 1:
             global num_of_ship
-            print(num_of_ship)
             if num_of_ship == 9:
                 self.screen.blit(load_image("starships/size_45/yellow 45x41.png"), (self.x, self.y))
             if num_of_ship == 8:
