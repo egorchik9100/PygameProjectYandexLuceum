@@ -26,7 +26,8 @@ class MainScene:
         self.last_shot_time = 0
         self.screen = screen
         self.paused = False
-        self.score = 0
+        self.score = 100
+        self.score_flag = True
         self.in_game = True
 
     def run_game(self):
@@ -83,11 +84,13 @@ class MainScene:
                     num_of_ship = 1
                 if keys[pygame.K_8]:  # при нажимании кнопки 9, текущий корабль сменяется на 8;
                     num_of_ship = 8
-                if self.score >= 112:  # когда игрок достигает 112 очков и больше, его корабль сменяется на 9;
+                    print(f"in here: {num_of_ship}")
+                if self.score >= 112 and self.score_flag:  # когда игрок достигает 112 очков и больше, его корабль сменяется на 9;
                     num_of_ship = 9
+                    self.score_flag = False
 
                 keys = pygame.key.get_pressed()
-                if keys[pygame.K_SPACE] and self.can_shoot and current_time - self.last_shot_time > self.shoot_delay:
+                if keys[pygame.K_SPACE] and self.can_shoot and current_time - self.last_shot_time > self.shoot_delay:  # обработка стрельбы;
                     self.bullets.append(Bullet(self.turret.x,
                                                self.turret.y,
                                                self.turret.angle, self.screen, 1))
@@ -422,6 +425,7 @@ class Turret:
             pygame.draw.circle(self.screen, white, (self.x, self.y), 10)  # Основа турели
         if self.flag_turret == 1:
             global num_of_ship
+            print(num_of_ship)
             if num_of_ship == 9:
                 self.screen.blit(load_image("starships/size_45/yellow 45x41.png"), (self.x, self.y))
             if num_of_ship == 8:
