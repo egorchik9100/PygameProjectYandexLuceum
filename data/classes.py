@@ -203,6 +203,7 @@ class MainScene:
                 rect_score = text_score.get_rect(topright=(width - 50, 20))
 
                 self.screen.fill(black)
+                self.screen.blit(load_image('Без имени-1.jpg'), (0, 0))
                 for asteroid in self.asteroids:
                     asteroid.draw()
                 self.turret.draw()

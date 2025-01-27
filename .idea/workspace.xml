@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="отцентрованы пули">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="Добавлено XP астероидов">
-      <change beforePath="$PROJECT_DIR$/data/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/classes.py" afterDir="false" />
+    <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="Исправлена ошибка выстрелов турели">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,6 +99,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.main" />
         <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
