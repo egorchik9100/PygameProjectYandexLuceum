@@ -1,6 +1,6 @@
 import math
 import random
-from data.functions import load_image, music_crash_asteroid
+from data.functions import load_image, music_crash_asteroid, parse_json
 import pygame
 from random import choice
 import pygame_menu
@@ -29,12 +29,14 @@ class MainScene:
         self.score = 0
         self.score_flag = True
         self.in_game = True
+        self.level = 0
+        self.asteroid_chance = 0.05
 
     def run_game(self):
 
         # Создание астероидов, турели, списка пуль
         for i in range(5):
-            self.asteroids.append(Asteroid(self.screen))
+            self.asteroids.append(Asteroid(self.screen, self.level))
 
         font = pygame.font.Font(None, 36)
 
@@ -93,7 +95,7 @@ class MainScene:
                 if keys[pygame.K_SPACE] and self.can_shoot and current_time - self.last_shot_time > self.shoot_delay:  # обработка стрельбы;
                     self.bullets.append(Bullet(self.turret.x,
                                                self.turret.y,
-                                               self.turret.angle, self.screen, 1))
+                                               self.turret.angle, self.screen, 1, self.level))
                     self.can_shoot = False  # Запрещаем стрельбу;
                     self.last_shot_time = current_time  # Обновляем время последнего выстрела;
 
@@ -121,17 +123,22 @@ class MainScene:
                         self.buffs_red.remove(buff_r)
 
                 # Добавляем новые астероиды и зелья (для постоянной игры);
-                if random.random() < 0.05:
-                    self.asteroids.append(Asteroid(self.screen))
-                if self.score > 90:
-                    if random.random() < 0.002:
+                if random.random() < self.asteroid_chance:
+                    self.asteroids.append(Asteroid(self.screen, self.level))
+                if self.score > 100:
+                    if random.random() < 0.0002:
                         self.buffs_white.append(BuffWhite(self.screen))
-                    if random.random() < 0.002:
+                    if random.random() < 0.0002:
                         self.buffs_red.append(BuffRed(self.screen))
-                    if random.random() < 0.002:
+                    if random.random() < 0.0002:
                         self.buffs_blue.append(BuffBlue(self.screen))
-                    if random.random() < 0.002:
+                    if random.random() < 0.0002:
                         self.buffs_green.append(BuffGreen(self.screen))
+                # Новый уровень
+                if self.score // 10 > self.level:
+                    self.level += 1
+                    self.asteroid_chance += parse_json('asteroid', 'chance')
+
 
                 # Обновление и отрисовка пуль
                 for bullet in self.bullets[:]:
@@ -146,13 +153,13 @@ class MainScene:
                         if distance < asteroid.size:
                             asteroid_hp = asteroid.health
                             self.score += 0.5
-                            if asteroid_hp - 10 == 0:
+                            if asteroid_hp - bullet.damage <= 0:
                                 music_crash_asteroid(flag=1, thing="Asteroid")
                                 self.asteroids.remove(asteroid)
                                 self.score += 2
                             else:
                                 music_crash_asteroid(flag=0, thing="Asteroid")
-                                asteroid.health -= 10
+                                asteroid.health -= bullet.damage
                             self.bullets.remove(bullet)
                             break
 
@@ -202,6 +209,9 @@ class MainScene:
                 text_score = font.render(f"Счёт: {int(self.score)}", True, (100, 100, 100))
                 rect_score = text_score.get_rect(topright=(width - 50, 20))
 
+                text_level = font.render(f"Уровень: {int(self.level)}", True, (100, 100, 100))
+                rect_level = text_score.get_rect(topright=(110, 20))
+
                 self.screen.fill(black)
                 self.screen.blit(load_image('Без имени-1.jpg'), (0, 0))
                 for asteroid in self.asteroids:
@@ -218,6 +228,7 @@ class MainScene:
                 for bullet in self.bullets:
                     bullet.draw()
                 self.screen.blit(text_score, rect_score)  # Вывод количества очков
+                self.screen.blit(text_level, rect_level)
                 self.screen.blit(pause_button_text, pause_button_rect)  # Вывод кнопки паузы
                 pygame.display.flip()  # Обновление экрана
                 clock.tick(60)
@@ -273,14 +284,14 @@ class StartWindow:
 
 
 class Asteroid(pygame.sprite.Sprite):
-    def __init__(self, screen):
+    def __init__(self, screen, level):
         super().__init__()
         self.screen = screen
         self.size = random.randint(20, 50)
         self.x = random.randint(0, width - self.size)
         self.y = -self.size
-        self.speed = random.randint(2, 5)
-        self.health = random.choice([10, 20, 30, 40, 50])
+        self.speed = random.randint(2, 5) + parse_json('asteroid', 'speed') * level
+        self.health = random.choice([10, 20, 30, 40, 50]) + parse_json('asteroid', 'hp') * level
         self.max_health = self.health
 
     def update(self):
@@ -399,7 +410,7 @@ class Turret:
         self.x = width // 2
         self.y = height - 60
         self.angle = 90  # Начальный угол
-        self.speed = 5  # Скорость перемещения турели
+        self.speed = 8  # Скорость перемещения турели
         self.flag_turret = 1
 
 
@@ -426,7 +437,6 @@ class Turret:
             pygame.draw.circle(self.screen, white, (self.x, self.y), 10)  # Основа турели
         if self.flag_turret == 1:
             global num_of_ship
-            print(num_of_ship)
             if num_of_ship == 9:
                 self.screen.blit(load_image("starships/size_45/yellow 45x41.png"), (self.x, self.y))
             if num_of_ship == 8:
@@ -438,7 +448,7 @@ class Turret:
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, x, y, angle, screen, force):
+    def __init__(self, x, y, angle, screen, force, level):
         super().__init__()
         self.force = force
         self.screen = screen
@@ -452,7 +462,8 @@ class Bullet(pygame.sprite.Sprite):
             self.x = x + 28.5
         self.y = y
         self.angle = math.radians(angle)  # Преобразование угла в радианы
-        self.speed = 10
+        self.speed = 10 + parse_json('bullet', 'speed') * level
+        self.damage = 10 + parse_json('bullet', 'damage') * level
 
     def update(self):
         if num_of_ship == 8:

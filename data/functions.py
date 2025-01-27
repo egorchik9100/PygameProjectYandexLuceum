@@ -1,6 +1,7 @@
 import os
 import sys
 import pygame
+import json
 
 
 def load_image(name, colorkey=None):
@@ -28,3 +29,10 @@ def music_crash_asteroid(flag=None, thing=None):
             pygame.mixer.Sound("sounds/hit_asteroid.mp3").play()
     if thing == "buff":
         pass
+
+
+def parse_json(obj, arg):
+    with open('levels/next_level.json') as level_set:
+        data = json.load(level_set)
+        return data[obj][arg]
+
