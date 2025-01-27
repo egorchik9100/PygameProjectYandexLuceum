@@ -26,7 +26,7 @@ class MainScene:
         self.last_shot_time = 0
         self.screen = screen
         self.paused = False
-        self.score = 100
+        self.score = 0
         self.score_flag = True
         self.in_game = True
 
