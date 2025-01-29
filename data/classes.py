@@ -1,9 +1,12 @@
+
 import math
 import random
-from data.functions import load_image, music_crash_asteroid, parse_json
+import time
+
 import pygame
-from random import choice
 import pygame_menu
+
+from data.functions import load_image, music_crash_asteroid, parse_json
 
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -31,9 +34,12 @@ class MainScene:
         self.in_game = True
         self.level = 0
         self.asteroid_chance = 0.05
+        self.time = 0
+        self.game_over = False  # Флаг для отслеживания окончания игры
 
     def run_game(self):
 
+        self.time = time.time()
         # Создание астероидов, турели, списка пуль
         for i in range(5):
             self.asteroids.append(Asteroid(self.screen, self.level))
@@ -50,6 +56,10 @@ class MainScene:
         self.menu.add.button("Выйти", self.exit_game)
         self.menu.disable()  # Изначально меню паузы скрыто
 
+        self.finish_menu = pygame_menu.Menu("Конец", 300, 300, theme=pygame_menu.themes.THEME_BLUE)
+        self.finish_menu.add.button("Сыграть еще раз", self.play_one_more)
+        self.finish_menu.add.button("Выйти", self.exit_game)
+        self.finish_menu.disable()
 
         # Главный цикл игры
         pygame.mixer.music.load("sounds/For_game.mp3")
@@ -58,20 +68,21 @@ class MainScene:
         clock = pygame.time.Clock()
         while running:
             if self.in_game is False:
+                pygame.mixer.music.stop()
                 return 'menu'
             current_time = pygame.time.get_ticks()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
                     return running
-                if not self.paused:
+                if not self.paused and not self.game_over:  # Если игра не на паузе и не окончена
                     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                         if pause_button_rect.collidepoint(event.pos):
                             self.paused = True
                             self.menu.enable()
                             self.menu.mainloop(self.screen)
 
-            if not self.paused:
+            if not self.paused and not self.game_over:  # если игра не на паузе и не окончена
                 global num_of_ship
                 # Управление турелью
                 keys = pygame.key.get_pressed()
@@ -145,6 +156,22 @@ class MainScene:
                     bullet.update()
                     if bullet.is_off_screen():
                         self.bullets.remove(bullet)
+
+                # проверка столкновений турели с астероидом
+                for asteroid in self.asteroids[:]:
+                    if pygame.sprite.collide_rect(self.turret, asteroid) and not self.game_over:
+                        pygame.mixer.music.stop()
+                        pygame.mixer.music.load('sounds/Crash.mp3')
+                        pygame.mixer.music.play(-1)
+                        for num in range(4):
+                            self.turret.crash(num + 1)
+                            pygame.display.flip()
+                            time.sleep(0.5)
+                        pygame.mixer.music.stop()
+                        self.game_over = True
+                        self.paused = True
+                        self.finish_menu.enable()
+                        self.finish_menu.mainloop(self.screen)  # Отображаем меню finish'''
 
                 # Проверка столкновений
                 for bullet in self.bullets[:]:
@@ -233,7 +260,7 @@ class MainScene:
                 pygame.display.flip()  # Обновление экрана
                 clock.tick(60)
             else:
-                if not self.menu.is_enabled():
+                if not self.menu.is_enabled() and not self.finish_menu.is_enabled():
                     self.screen.blit(pause_button_text, pause_button_rect)  # Вывод кнопки паузы
                     pygame.display.flip()
 
@@ -247,6 +274,18 @@ class MainScene:
     def exit_game(self):
         self.in_game = False
         self.menu.disable()
+        self.finish_menu.disable()
+
+    def play_one_more(self):
+        self.game_over = False
+        self.paused = False
+        self.score = 0
+        self.score_flag = True
+        self.level = 0
+        self.asteroids.clear()
+        for i in range(5):
+            self.asteroids.append(Asteroid(self.screen, self.level))
+        self.finish_menu.disable()
 
 
 class StartWindow:
@@ -293,21 +332,27 @@ class Asteroid(pygame.sprite.Sprite):
         self.speed = random.randint(2, 5) + parse_json('asteroid', 'speed') * level
         self.health = random.choice([10, 20, 30, 40, 50]) + parse_json('asteroid', 'hp') * level
         self.max_health = self.health
+        self.rect = pygame.Rect(self.x, self.y, self.size - 10, self.size - 10)
+
 
     def update(self):
         self.y += self.speed
+        self.rect.y = self.y
         if self.y > height:
             return True  # Удаляем астероид, если он вышел за экран
         return False
 
     def draw(self):
         if 20 <= self.size < 30:
-            self.screen.blit(load_image("asteroids/size_25/Круглый астреоид на белом фоне_25.png", colorkey=-1), (self.x, self.y))
+            self.screen.blit(load_image("asteroids/size_25/Круглый астреоид на белом фоне_25.png", colorkey=-1),
+                             (self.rect.x, self.rect.y))
         if 30 <= self.size < 40:
-            self.screen.blit(load_image("asteroids/size_35/Астероид в космосе_35_new.png", colorkey=-1), (self.x, self.y))
+            self.screen.blit(load_image("asteroids/size_35/Астероид в космосе_35_new.png", colorkey=-1),
+                             (self.rect.x, self.rect.y))
         if 40 <= self.size <= 50:
-            self.screen.blit(load_image("asteroids/size_45/Астероид из блэндера_45_new.png", colorkey=-1), (self.x, self.y))
-        cords = (self.x, self.y - 5, self.health / self.max_health * self.size, 5)
+            self.screen.blit(load_image("asteroids/size_45/Астероид из блэндера_45_new.png", colorkey=-1),
+                             (self.rect.x, self.rect.y))
+        cords = (self.rect.x, self.rect.y - 5, self.health / self.max_health * self.size, 5)
         if self.max_health - self.health == 10:
             pygame.draw.rect(self.screen, "yellow", cords)
         if self.max_health - self.health == 20:
@@ -404,15 +449,16 @@ class BuffGreen(pygame.sprite.Sprite):
         pass
 
 
-class Turret:
+class Turret(pygame.sprite.Sprite):
     def __init__(self, screen):
+        super().__init__()
         self.screen = screen
         self.x = width // 2
         self.y = height - 60
         self.angle = 90  # Начальный угол
         self.speed = 8  # Скорость перемещения турели
         self.flag_turret = 1
-
+        self.rect = pygame.Rect(self.x, self.y, 40, 40)
 
     def update(self, dx):
         if num_of_ship == 8:
@@ -427,6 +473,7 @@ class Turret:
         if num_of_ship == 9:
             self.x += dx * self.speed
             self.x = max(0, min(self.x, 755))  # Ограничение движения по ширине экрана
+        self.rect.x = self.x
 
     def draw(self):
         if self.flag_turret == 0:
@@ -446,6 +493,17 @@ class Turret:
             if num_of_ship == 0:
                 self.screen.blit(load_image("starships/size_45/white_level1 56x55-no-bg-preview.png"), (self.x, self.y))
 
+    def crash(self, num):
+        self.screen.blit(load_image(f"starships/crash/crash{num}.png"), (self.x - 20, self.y - 50))
+
+    def cut_sheet(self, sheet, columns, rows):
+        self.rect = pygame.Rect(0, 0, sheet.get_width() // columns,
+                                sheet.get_height() // rows)
+        for j in range(rows):
+            for i in range(columns):
+                frame_location = (self.rect.w * i, self.rect.h * j)
+                self.frames.append(sheet.subsurface(pygame.Rect(
+                    frame_location, self.rect.size)))
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, angle, screen, force, level):
