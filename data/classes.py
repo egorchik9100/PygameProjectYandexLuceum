@@ -286,6 +286,8 @@ class MainScene:
         for i in range(5):
             self.asteroids.append(Asteroid(self.screen, self.level))
         self.finish_menu.disable()
+        pygame.mixer.music.load("sounds/For_game.mp3")
+        pygame.mixer.music.play()
 
 
 class StartWindow:
