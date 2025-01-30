@@ -56,9 +56,11 @@ class MainScene:
         self.menu.add.button("Выйти", self.exit_game)
         self.menu.disable()  # Изначально меню паузы скрыто
 
-        self.finish_menu = pygame_menu.Menu("Конец", 300, 300, theme=pygame_menu.themes.THEME_BLUE)
-        self.finish_menu.add.button("Сыграть еще раз", self.play_one_more)
-        self.finish_menu.add.button("Выйти", self.exit_game)
+        self.finish_menu = pygame_menu.Menu("Вы врезались в астероид", 500, 500, theme=pygame_menu.themes.THEME_BLUE)
+        scores = self.finish_menu.add.label(f'Очки: {self.score}')
+        times = self.finish_menu.add.label(f'ВРЕМЯ - {self.time}')
+        one_more = self.finish_menu.add.button("Сыграть еще раз", self.play_one_more)
+        exits = self.finish_menu.add.button("Выйти", self.exit_game)
         self.finish_menu.disable()
 
         # Главный цикл игры
@@ -168,10 +170,21 @@ class MainScene:
                             pygame.display.flip()
                             time.sleep(0.5)
                         pygame.mixer.music.stop()
+                        self.finish_menu.remove_widget(scores)
+                        self.finish_menu.remove_widget(one_more)
+                        self.finish_menu.remove_widget(exits)
+                        self.finish_menu.remove_widget(times)
+                        self.time = time.time() - self.time
+                        scores = self.finish_menu.add.label(f'СЧЕТ - {self.score}')
+                        text = str(self.time).split('.')[0]
+                        times = self.finish_menu.add.label(f'ВРЕМЯ - {text} сек')
+                        one_more = self.finish_menu.add.button("Сыграть еще раз", self.play_one_more)
+                        exits = self.finish_menu.add.button("Выйти", self.exit_game)
                         self.game_over = True
                         self.paused = True
                         self.finish_menu.enable()
                         self.finish_menu.mainloop(self.screen)  # Отображаем меню finish'''
+                        self.time = time.time()
 
                 # Проверка столкновений
                 for bullet in self.bullets[:]:
