@@ -3,6 +3,7 @@ import random
 import time
 
 import pygame
+from random import choice
 import pygame_menu
 
 from data.functions import load_image, music_crash_asteroid, parse_json
@@ -111,6 +112,11 @@ class MainScene:
                     self.can_shoot = False  # Запрещаем стрельбу;
                     self.last_shot_time = current_time  # Обновляем время последнего выстрела;
 
+                # Проигрываем музыку;
+                if self.score == 1000 and self.score_music_1000:
+                    self.score_music_1000 = False
+                    music_crash_asteroid(thing="level_up")
+
                 # Разрешаем стрельбу;
                 if not self.can_shoot and current_time - self.last_shot_time > self.shoot_delay:
                     self.can_shoot = True
@@ -206,6 +212,7 @@ class MainScene:
                         distance = math.dist((bullet.x, bullet.y), (buff_w.x, buff_w.y))
                         if distance < buff_w.size:
                             try:
+                                self.buff_flag = False
                                 self.buffs_white.remove(buff_w)
                                 self.bullets.remove(bullet)
                             except Exception as er:
@@ -216,6 +223,7 @@ class MainScene:
                         distance = math.dist((bullet.x, bullet.y), (buff_g.x, buff_g.y))
                         if distance < buff_g.size:
                             try:
+                                self.buff_flag = False
                                 self.buffs_green.remove(buff_g)
                                 self.bullets.remove(bullet)
                             except Exception as er:
@@ -226,6 +234,7 @@ class MainScene:
                         distance = math.dist((bullet.x, bullet.y), (buff_r.x, buff_r.y))
                         if distance < buff_r.size:
                             try:
+                                self.buff_flag = False
                                 self.buffs_red.remove(buff_r)
                                 self.bullets.remove(bullet)
                             except Exception as er:
@@ -237,6 +246,8 @@ class MainScene:
                         if distance < buff_b.size:
                             self.score += 100
                             try:
+                                music_crash_asteroid(thing="buff")
+                                self.buff_flag = False
                                 self.buffs_blue.remove(buff_b)
                                 self.bullets.remove(bullet)
                             except Exception as er:
