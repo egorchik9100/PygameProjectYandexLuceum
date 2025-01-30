@@ -35,4 +35,3 @@ def parse_json(obj, arg):
     with open('levels/next_level.json') as level_set:
         data = json.load(level_set)
         return data[obj][arg]
-
