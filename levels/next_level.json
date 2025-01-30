@@ -1,0 +1,11 @@
+{
+  "asteroid": {
+    "hp": 5,
+    "speed": 2,
+    "chance": 0.02
+  },
+  "bullet": {
+    "damage": 5,
+    "speed": 3
+  }
+}
