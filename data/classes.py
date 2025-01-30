@@ -309,15 +309,25 @@ class StartWindow:
         self.font = pygame.font.SysFont("Arial", 36)
 
     def draw_button(self, text, x, y, width, height):
-        pygame.draw.rect(self.screen, 'gray', (x, y, width, height))
+        pygame.draw.rect(self.screen, 'blue', (x, y, width, height))
         pygame.draw.rect(self.screen, 'black', (x, y, width, height), 3)
 
-        label = self.font.render(text, True, 'black')
+        label = self.font.render(text, True, 'white')
         text_rect = label.get_rect(center=(x + width // 2, y + height // 2))
         self.screen.blit(label, text_rect)
 
     def main_menu(self):
         running = True
+        self.menu = pygame_menu.Menu("Справка по игре", 600, 600, theme=pygame_menu.themes.THEME_DARK)
+        self.menu.add.label('Управление:', 'green')
+        self.menu.add.label("'<' : '>' - управление турелью")
+        self.menu.add.label("'space' - стрельба")
+        self.menu.add.label('АВТОРЫ:')
+        self.menu.add.label('Беликов А, Советов Е, Челноков Е')
+        self.menu.add.label('Проект на GitHub:')
+        self.menu.add.label('https://clck.ru/3G62aD')
+        self.menu.add.button("OK", self.skip_menu)
+        self.menu.disable()  # Изначально меню паузы скрыто
         while True:
             self.screen.fill('white')
             for event in pygame.event.get():
@@ -328,13 +338,26 @@ class StartWindow:
                     mouse_pos = pygame.mouse.get_pos()
                     if play_button.collidepoint(mouse_pos):
                         return "game"
+                    if spravka_button.collidepoint(mouse_pos):
+                        self.menu.enable()
+                        self.menu.mainloop(self.screen)
 
+            self.screen.blit(load_image('space.jpg'), (0, 0))
+            font = pygame.font.Font(None, 36)
+            main_text = font.render("Добро пожаловать в GALLA SPACE!", True, white)
+            main_rect = main_text.get_rect(topright=(625, 100))
+            self.screen.blit(main_text, main_rect)
             play_button = pygame.Rect(width // 2 - 150, height // 2 - 50, 300, 50)
             records_button = pygame.Rect(width // 2 - 150, height // 2 + 20, 300, 50)
+            spravka_button = pygame.Rect(width // 2 - 150, height // 2 + 90, 300, 50)
             self.draw_button("Играть", play_button.x, play_button.y, play_button.width, play_button.height)
             self.draw_button("Рекорды", records_button.x, records_button.y, records_button.width, records_button.height)
+            self.draw_button("О игре", spravka_button.x, spravka_button.y, spravka_button.width, spravka_button.height)
 
             pygame.display.update()
+
+    def skip_menu(self):
+        self.menu.disable()
 
 
 class Asteroid(pygame.sprite.Sprite):
