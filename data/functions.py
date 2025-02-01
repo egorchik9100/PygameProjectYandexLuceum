@@ -1,7 +1,8 @@
 import os
 import sys
 import pygame
-
+import json
+import sqlite3
 
 def load_image(name, colorkey=None):
     fullname = 'images/' + name
@@ -27,6 +28,17 @@ def music_crash_asteroid(flag=None, thing=None):
         if flag == 0:
             pygame.mixer.Sound("sounds/hit_asteroid.mp3").play()
     if thing == "buff":
-        pygame.mixer.Sound("sounds/buff_blue.mp3").play()
-    if thing == "level_up":
-        pygame.mixer.Sound("sounds/level_up.mp3").play()
+        pass
+
+
+def parse_json(obj, arg):
+    with open('levels/next_level.json') as level_set:
+        data = json.load(level_set)
+        return data[obj][arg]
+
+def load_db(score,time,level):
+    con = sqlite3.connect("db/database.sqlite")
+    cur = con.cursor()
+    cur.execute("INSERT INTO data (score, time, level) VALUES (?, ?, ?)",(score, time, level))
+    con.commit()
+    con.close()
