@@ -1,3 +1,4 @@
+
 import math
 import random
 import time
@@ -162,7 +163,7 @@ class MainScene:
                 for asteroid in self.asteroids[:]:
                     if pygame.sprite.collide_rect(self.turret, asteroid) and not self.game_over:
                         pygame.mixer.music.stop()
-                        pygame.mixer.music.load('sounds/crash.mp3')
+                        pygame.mixer.music.load('sounds/Crash.mp3')
                         pygame.mixer.music.play(-1)
                         for num in range(4):
                             self.turret.crash(num + 1)
