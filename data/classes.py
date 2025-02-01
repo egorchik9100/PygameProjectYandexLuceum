@@ -6,7 +6,7 @@ import time
 import pygame
 import pygame_menu
 
-from data.functions import load_image, music_crash_asteroid, parse_json
+from data.functions import load_image, music_crash_asteroid, parse_json, load_db
 
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -180,6 +180,7 @@ class MainScene:
                         times = self.finish_menu.add.label(f'ВРЕМЯ - {text} сек')
                         one_more = self.finish_menu.add.button("Сыграть еще раз", self.play_one_more)
                         exits = self.finish_menu.add.button("Выйти", self.exit_game)
+                        load_db(self.score, text, self.level)
                         self.game_over = True
                         self.paused = True
                         self.finish_menu.enable()
