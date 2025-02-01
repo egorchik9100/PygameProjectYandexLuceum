@@ -37,9 +37,8 @@ def parse_json(obj, arg):
         return data[obj][arg]
 
 def load_db(score,time,level):
-    con = sqlite3.connect("db.database.sqlite")
+    con = sqlite3.connect("db/database.sqlite")
     cur = con.cursor()
-    cur.execute("""
-    INSERT INTO data (score, time, level) VALUES (?, ?, ?)"""), (score, time, level)
+    cur.execute("INSERT INTO data (score, time, level) VALUES (?, ?, ?)",(score, time, level))
     con.commit()
     con.close()
