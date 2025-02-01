@@ -1,12 +1,13 @@
-
 import math
 import random
 import time
 
 import pygame
 import pygame_menu
+from pygame.examples.go_over_there import screen
 
 from data.functions import load_image, music_crash_asteroid, parse_json, load_db
+import sqlite3
 
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -105,7 +106,8 @@ class MainScene:
                     self.score_flag = False
 
                 keys = pygame.key.get_pressed()
-                if keys[pygame.K_SPACE] and self.can_shoot and current_time - self.last_shot_time > self.shoot_delay:  # обработка стрельбы;
+                if keys[
+                    pygame.K_SPACE] and self.can_shoot and current_time - self.last_shot_time > self.shoot_delay:  # обработка стрельбы;
                     self.bullets.append(Bullet(self.turret.x,
                                                self.turret.y,
                                                self.turret.angle, self.screen, 1, self.level))
@@ -151,7 +153,6 @@ class MainScene:
                 if self.score // 10 > self.level:
                     self.level += 1
                     self.asteroid_chance += parse_json('asteroid', 'chance')
-
 
                 # Обновление и отрисовка пуль
                 for bullet in self.bullets[:]:
@@ -373,7 +374,6 @@ class Asteroid(pygame.sprite.Sprite):
         self.max_health = self.health
         self.rect = pygame.Rect(self.x, self.y, self.size - 10, self.size - 10)
 
-
     def update(self):
         self.y += self.speed
         self.rect.y = self.y
@@ -403,7 +403,6 @@ class Asteroid(pygame.sprite.Sprite):
         if self.max_health - self.health == 0:
             pygame.draw.rect(self.screen, "green", cords)
 
-
     def damage(self, dam):
         self.health = self.health - dam
 
@@ -425,7 +424,7 @@ class BuffBlue(pygame.sprite.Sprite):
         return False
 
     def draw(self):
-       self.screen.blit(load_image("buffs/blue_expir 20x32.png", colorkey=-1), (self.x, self.y))
+        self.screen.blit(load_image("buffs/blue_expir 20x32.png", colorkey=-1), (self.x, self.y))
 
 
 class BuffWhite(pygame.sprite.Sprite):
@@ -502,9 +501,9 @@ class Turret(pygame.sprite.Sprite):
     def update(self, dx):
         if num_of_ship == 8:
             if dx < 0:
-                self.x += dx * self.speed - 3# Изменение координаты x, есди пользователь нажал кнопку <-
+                self.x += dx * self.speed - 3  # Изменение координаты x, есди пользователь нажал кнопку <-
             else:
-                self.x += dx * self.speed + 3 # Изменение координаты x, есди пользователь нажал кнопку ->
+                self.x += dx * self.speed + 3  # Изменение координаты x, есди пользователь нажал кнопку ->
             self.x = max(0, min(self.x, 736))  # Ограничение движения по ширине экрана
         if num_of_ship == 0 or num_of_ship == 1:
             self.x += dx * self.speed
@@ -544,6 +543,7 @@ class Turret(pygame.sprite.Sprite):
                 self.frames.append(sheet.subsurface(pygame.Rect(
                     frame_location, self.rect.size)))
 
+
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, angle, screen, force, level):
         super().__init__()
@@ -564,7 +564,7 @@ class Bullet(pygame.sprite.Sprite):
 
     def update(self):
         if num_of_ship == 8:
-            self.y -= self.speed * math.sin(self.angle) + 18 # Y убывает вверх
+            self.y -= self.speed * math.sin(self.angle) + 18  # Y убывает вверх
         else:
             self.y -= self.speed * math.sin(self.angle)  # Y убывает вверх
         self.x += self.speed * math.cos(self.angle)
@@ -580,3 +580,56 @@ class Bullet(pygame.sprite.Sprite):
 
     def is_off_screen(self):
         return self.x < 0 or self.x > width or self.y < 0 or self.y > height
+
+
+class RecordsWindow:
+    def __init__(self, screen):
+        self.screen = screen
+        self.font = pygame.font.SysFont("Arial", 36)
+
+    def get_top_scores(self):
+        conn = sqlite3.connect('database.db.sqlite')
+        cursor = conn.cursor()
+        cursor.execute('''
+            SELECT score, time, level FROM data
+            ORDER BY score DESC, time ASC, level DESC
+            LIMIT 10
+        ''')
+        data = cursor.fetchall()
+        conn.close()
+        return data
+
+    def display_highscores(self,scores):
+        self.screen.fill((0,0,0))
+        y_offset = 50
+        title = self.font.render("Топ-10 рекордов", True, (255,255,255))
+        self.screen.blit(title, (screen.get_width() // 2 - title.get_width() // 2, y_offset))
+        y_offset += 50
+
+        headers = ["Место", "Score", "Time", "Level"]
+        header_x = [50, 250, 450, 650]  # Позиции по горизонтали для каждого столбца
+        for i, header in enumerate(headers):
+            header_text = self.font.render(header, True, (255,255,255))
+            screen.blit(header_text, (header_x[i], y_offset))
+        y_offset += 50
+
+        for index, (score, time, level) in enumerate(scores, start=1):
+            place_text = self.font.render(str(index), True, (255,255,255))
+            score_text = self.font.render(str(score), True, (255,255,255))
+            time_text = self.font.render(time, True, (255,255,255))
+            level_text = self.font.render(str(level), True, (255,255,255))
+            screen.blit(place_text, (header_x[0], y_offset))
+            screen.blit(score_text, (header_x[1], y_offset))
+            screen.blit(time_text, (header_x[2], y_offset))
+            screen.blit(level_text, (header_x[3], y_offset))
+            y_offset += 40
+
+        pygame.display.flip()
+
+        back_button = pygame.Rect(screen.get_width() // 2 - 100, screen.get_height() - 100, 200, 50)
+        pygame.draw.rect(screen, (0,128,255), back_button)
+        back_text = self.font.render("Назад", True, (255,255,255))
+        screen.blit(back_text, (back_button.x + 50, back_button.y + 10))
+
+def skip_menu(self):
+    self.menu.disable()
