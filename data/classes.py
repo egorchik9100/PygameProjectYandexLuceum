@@ -447,21 +447,7 @@ class Asteroid(pygame.sprite.Sprite):
         self.health = self.health - dam
 
 
-class Buff:
-    def __init__(self, screen):
-        super().__init__()
-        self.screen = screen
-        self.speed = 3
-        self.health = 10
-
-    def update(self):
-        self.y += self.speed
-        if self.y > height:
-            return True  # Удаляем зелье, если оно вышло за экран
-        return False
-
-
-class BuffBlue(pygame.sprite.Sprite, Buff):
+class BuffBlue(pygame.sprite.Sprite):
     def __init__(self, screen):
         super().__init__()
         self.screen = screen
@@ -481,14 +467,14 @@ class BuffBlue(pygame.sprite.Sprite, Buff):
        self.screen.blit(load_image("buffs/blue_expir 20x32.png", colorkey=-1), (self.x, self.y))
 
 
-class BuffRed(pygame.sprite.Sprite, Buff):
+class BuffRed(pygame.sprite.Sprite):
     def __init__(self, screen):
         super().__init__()
         self.screen = screen
-        self.size = 20
+        self.size = 21
         self.x = random.randint(0, width - self.size)
         self.y = -self.size
-        self.speed = 3
+        self.speed = 4
         self.health = 10
 
     def update(self):
@@ -501,14 +487,14 @@ class BuffRed(pygame.sprite.Sprite, Buff):
        self.screen.blit(load_image("buffs/red_hp 20x28.png", colorkey=-1), (self.x, self.y))
 
 
-class BuffWhite(pygame.sprite.Sprite, Buff):
+class BuffWhite(pygame.sprite.Sprite):
     def __init__(self, screen):
         super().__init__()
         self.screen = screen
         self.size = 17
         self.x = random.randint(0, width - self.size)
         self.y = -self.size
-        self.speed = 3
+        self.speed = 3.5
         self.health = 10
 
     def update(self):
@@ -519,7 +505,6 @@ class BuffWhite(pygame.sprite.Sprite, Buff):
 
     def draw(self):
         self.screen.blit(load_image("buffs/white_alldamage 17x70.png", colorkey=-1), (self.x, self.y))
-
 
 
 class Turret(pygame.sprite.Sprite):
@@ -577,6 +562,7 @@ class Turret(pygame.sprite.Sprite):
                 frame_location = (self.rect.w * i, self.rect.h * j)
                 self.frames.append(sheet.subsurface(pygame.Rect(
                     frame_location, self.rect.size)))
+
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, angle, screen, force, level):

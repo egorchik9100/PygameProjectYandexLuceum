@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="Добавлено красное зелье, которое добавляет здоровье кораблю">
+    <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="Добавлены желтые пули для 9 корабля">
       <change beforePath="$PROJECT_DIR$/data/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/classes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -186,7 +186,23 @@
       <option name="project" value="LOCAL" />
       <updated>1738500767067</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Добавлены желтые пули для 9 корабля">
+      <option name="closed" value="true" />
+      <created>1738501127933</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1738501127933</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Добавлены желтые пули для 9 корабля">
+      <option name="closed" value="true" />
+      <created>1738501173218</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1738501173218</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -213,6 +229,7 @@
     <MESSAGE value="Исправлен файл бд" />
     <MESSAGE value="уровень жизни добавлен" />
     <MESSAGE value="Добавлено красное зелье, которое добавляет здоровье кораблю" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавлено красное зелье, которое добавляет здоровье кораблю" />
+    <MESSAGE value="Добавлены желтые пули для 9 корабля" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавлены желтые пули для 9 корабля" />
   </component>
 </project>
