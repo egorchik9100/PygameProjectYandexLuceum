@@ -174,7 +174,7 @@ class MainScene:
 
                 # проверка столкновений турели с астероидом
                 for asteroid in self.asteroids[:]:
-                    if pygame.sprite.collide_rect(self.turret, asteroid) and not self.game_over and self.life == 0:
+                    if pygame.sprite.collide_rect(self.turret, asteroid) and not self.game_over and self.life <= 0:
                         pygame.mixer.music.stop()
                         pygame.mixer.music.load('sounds/Crash.mp3')
                         pygame.mixer.music.play(-1)
@@ -361,7 +361,7 @@ class StartWindow:
         self.menu.add.label("'<' : '>' - управление турелью")
         self.menu.add.label("'space' - стрельба")
         self.menu.add.label('АВТОРЫ:')
-        self.menu.add.label('Его высочество - Беликов А. Р., Советов Е, Челноков Е')
+        self.menu.add.label('Советов Е, Челноков Е, Беляков А')
         self.menu.add.label('Проект на GitHub:')
         self.menu.add.label('https://clck.ru/3G62aD')
         self.menu.add.button("OK", self.skip_menu)

@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="Изменена вероятность зелий;" />
+    <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="Исправлен файл бд">
+      <change afterPath="$PROJECT_DIR$/materials/GALA space.pptx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/classes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/database.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/db/database.sqlite" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/levels/next_level.json" beforeDir="false" afterPath="$PROJECT_DIR$/levels/next_level.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -46,9 +55,10 @@
     "Python.classes.executor": "Run",
     "Python.code (2).executor": "Run",
     "Python.main.executor": "Run",
+    "Python.python main.py.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "andrey-belikov",
+    "git-widget-placeholder": "master",
     "last_opened_file_path": "C:/Users/user/PycharmProjects/PygameProjectYandexLuceum",
     "settings.editor.selected.configurable": "preferences.lookFeel"
   }
@@ -59,7 +69,7 @@
       <recent name="C:\Users\user\PycharmProjects\PygameProjectYandexLuceum\images\asteroids" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.python main.py">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="PygameProjectYandexLuceum" />
       <option name="ENV_FILES" value="" />
@@ -82,8 +92,31 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="python main.py" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="PygameProjectYandexLuceum" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.python main.py" />
         <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
@@ -176,55 +209,7 @@
       <option name="project" value="LOCAL" />
       <updated>1738489845089</updated>
     </task>
-    <task id="LOCAL-00010" summary="Добавлено красное зелье, которое добавляет здоровье кораблю">
-      <option name="closed" value="true" />
-      <created>1738500767067</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1738500767067</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Добавлены желтые пули для 9 корабля">
-      <option name="closed" value="true" />
-      <created>1738501127933</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1738501127933</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Добавлены желтые пули для 9 корабля">
-      <option name="closed" value="true" />
-      <created>1738501173218</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1738501173218</updated>
-    </task>
-    <task id="LOCAL-00013" summary="Чистка кода от лишнего;">
-      <option name="closed" value="true" />
-      <created>1738501362557</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1738501362557</updated>
-    </task>
-    <task id="LOCAL-00014" summary="Изменена скорость пуль для 8 корабля;">
-      <option name="closed" value="true" />
-      <created>1738501878702</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1738501878702</updated>
-    </task>
-    <task id="LOCAL-00015" summary="Изменена вероятность зелий;">
-      <option name="closed" value="true" />
-      <created>1738502008250</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1738502008250</updated>
-    </task>
-    <option name="localTasksCounter" value="16" />
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -249,12 +234,6 @@
     <MESSAGE value="В классе добавлен метод damage для считывания урона и метод random_image_asteroid для выбора случайного изображения в зависимости от размера, а также начат метод draw который ставит изображения в зависимости от размера" />
     <MESSAGE value="Добавлено XP астероидов" />
     <MESSAGE value="Исправлен файл бд" />
-    <MESSAGE value="уровень жизни добавлен" />
-    <MESSAGE value="Добавлено красное зелье, которое добавляет здоровье кораблю" />
-    <MESSAGE value="Добавлены желтые пули для 9 корабля" />
-    <MESSAGE value="Чистка кода от лишнего;" />
-    <MESSAGE value="Изменена скорость пуль для 8 корабля;" />
-    <MESSAGE value="Изменена вероятность зелий;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Изменена вероятность зелий;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Исправлен файл бд" />
   </component>
 </project>
