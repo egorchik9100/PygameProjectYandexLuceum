@@ -1,5 +1,6 @@
 import pygame
-from data.classes import MainScene, StartWindow
+
+from data.classes import MainScene, StartWindow, RecordsWindow
 
 
 def main():
@@ -17,10 +18,21 @@ def main():
             running = start_window.main_menu()
             if running == "game":
                 current_scene = "game"
+            elif running == "records":
+                current_scene = "records"
         elif current_scene == "game":
             main_scene = MainScene(screen)
             running = main_scene.run_game()
             if running == "menu":
+                current_scene = "menu"
+            elif running == "records":
+                current_scene = "records"
+        elif current_scene == "records":
+            records_scene = RecordsWindow(screen)
+            running = records_scene.display_highscores()
+            if running == "game":
+                current_scene = "game"
+            elif running == "menu":
                 current_scene = "menu"
     pygame.quit()
     '''except Exception as er:
