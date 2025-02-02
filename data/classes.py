@@ -274,7 +274,7 @@ class MainScene:
                 rect_score = text_score.get_rect(topright=(width - 50, 20))
 
                 # Проверка уровня жизни;
-                if 80 < self.life <= 100:
+                if 80 < self.life <= 512:
                     self.color = "green"
                 if 50 < self.life <= 80:
                     self.color = "yellow"
