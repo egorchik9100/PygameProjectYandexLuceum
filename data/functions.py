@@ -30,10 +30,7 @@ def music_crash_asteroid(flag=None, thing=None):
         if flag == 0:
             pygame.mixer.Sound("sounds/hit_asteroid.mp3").play()
     if thing == "buff":
-        if flag == 1:
-            pygame.mixer.Sound("sounds/buff_blue.mp3").play()
-        if flag == 2:
-            pygame.mixer.Sound("sounds/buff_blue.mp3").play()
+        pygame.mixer.Sound("sounds/buffs.mp3").play()
     if thing == "level_up":
         pygame.mixer.Sound("sounds/level_up.mp3").play()
 
