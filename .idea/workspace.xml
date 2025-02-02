@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="Добавлены желтые пули для 9 корабля">
+    <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="Чистка кода от лишнего;">
       <change beforePath="$PROJECT_DIR$/data/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/classes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -202,7 +202,15 @@
       <option name="project" value="LOCAL" />
       <updated>1738501173218</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Чистка кода от лишнего;">
+      <option name="closed" value="true" />
+      <created>1738501362557</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1738501362557</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -230,6 +238,7 @@
     <MESSAGE value="уровень жизни добавлен" />
     <MESSAGE value="Добавлено красное зелье, которое добавляет здоровье кораблю" />
     <MESSAGE value="Добавлены желтые пули для 9 корабля" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавлены желтые пули для 9 корабля" />
+    <MESSAGE value="Чистка кода от лишнего;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Чистка кода от лишнего;" />
   </component>
 </project>

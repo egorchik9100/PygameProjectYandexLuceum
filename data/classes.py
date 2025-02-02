@@ -515,7 +515,6 @@ class Turret(pygame.sprite.Sprite):
         self.y = height - 60
         self.angle = 90  # Начальный угол;
         self.speed = 8  # Скорость перемещения турели;
-        self.flag_turret = 1
         self.rect = pygame.Rect(self.x, self.y, 40, 40)
 
     def update(self, dx):
@@ -534,22 +533,15 @@ class Turret(pygame.sprite.Sprite):
         self.rect.x = self.x
 
     def draw(self):
-        if self.flag_turret == 0:
-            # Рисуем турель (простая линия)
-            pygame.draw.line(self.screen, white, (self.x, self.y),
-                             (self.x + 50 * math.cos(math.radians(self.angle)),
-                              self.y - 50 * math.sin(math.radians(self.angle))), 5)
-            pygame.draw.circle(self.screen, white, (self.x, self.y), 10)  # Основа турели
-        if self.flag_turret == 1:
-            global num_of_ship
-            if num_of_ship == 9:
-                self.screen.blit(load_image("starships/size_45/yellow 45x41.png"), (self.x, self.y))
-            if num_of_ship == 8:
-                self.screen.blit(load_image("starships/size_45/white_level11 60x60.png"), (self.x, self.y))
-            if num_of_ship == 1:
-                self.screen.blit(load_image("starships/size_45/white_level1 56x55-no-bg-preview.png"), (self.x, self.y))
-            if num_of_ship == 0:
-                self.screen.blit(load_image("starships/size_45/white_level1 56x55-no-bg-preview.png"), (self.x, self.y))
+        global num_of_ship
+        if num_of_ship == 9:
+            self.screen.blit(load_image("starships/size_45/yellow 45x41.png"), (self.x, self.y))
+        if num_of_ship == 8:
+            self.screen.blit(load_image("starships/size_45/white_level11 60x60.png"), (self.x, self.y))
+        if num_of_ship == 1:
+            self.screen.blit(load_image("starships/size_45/white_level1 56x55-no-bg-preview.png"), (self.x, self.y))
+        if num_of_ship == 0:
+            self.screen.blit(load_image("starships/size_45/white_level1 56x55-no-bg-preview.png"), (self.x, self.y))
 
     def crash(self, num):
         self.screen.blit(load_image(f"starships/crash/crash{num}.png"), (self.x - 20, self.y - 50))
@@ -572,15 +564,21 @@ class Bullet(pygame.sprite.Sprite):
 
         global num_of_ship
         if num_of_ship == 9:
-            self.x = x + 22
+            self.x = x + 22  # для испускания пуль из центра кораблей;
         elif num_of_ship == 8:
             self.x = x + 26
         else:
             self.x = x + 28.5
         self.y = y
         self.angle = math.radians(angle)  # Преобразование угла в радианы;
-        self.speed = 10 + parse_json('bullet', 'speed') * level
-        self.damage = 10 + parse_json('bullet', 'damage') * level
+        if num_of_ship == 8:
+            self.speed = 20 + parse_json('bullet', 'speed') * level
+        else:
+            self.speed = 10 + parse_json('bullet', 'speed') * level
+        if num_of_ship == 9:
+            self.damage = 20 + parse_json('bullet', 'damage') * level
+        else:
+            self.damage = 10 + parse_json('bullet', 'damage') * level
 
     def update(self):
         if num_of_ship == 8:
@@ -595,7 +593,7 @@ class Bullet(pygame.sprite.Sprite):
                 self.screen.blit(load_image("bullet/bullet_new_after 9x16.png"), (self.x, self.y))
             else:  # иначе более вытянутая, благодаря этому переходу кажется, что пуля увеличивает скорость(но уверяю, это не так);
                 self.screen.blit(load_image("bullet/bullet_before 9x25.png"), (self.x, self.y))
-        if num_of_ship == 9:
+        elif num_of_ship == 9:
             pygame.draw.circle(self.screen, "yellow", (int(self.x), int(self.y)), 2)
         else:
             pygame.draw.circle(self.screen, "white", (int(self.x), int(self.y)), 2)
