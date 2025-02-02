@@ -2,6 +2,7 @@ import os
 import sys
 import pygame
 import json
+import sqlite3
 
 
 def load_image(name, colorkey=None):
@@ -36,3 +37,26 @@ def parse_json(obj, arg):
         data = json.load(level_set)
         return data[obj][arg]
 
+
+def load_db(score,time,level):
+    con = sqlite3.connect("db/database.sqlite")
+    cur = con.cursor()
+    cur.execute("INSERT INTO data (score, time, level) VALUES (?, ?, ?)",(score, time, level))
+    con.commit()
+    con.close()
+
+
+def get_res(score, time):
+    con = sqlite3.connect("db/database.sqlite")
+    cur = con.cursor()
+    res = list(cur.execute('''
+                SELECT score, time, level FROM data
+                ORDER BY score DESC, time ASC, level DESC
+            '''))
+    con.close()
+    for i in res:
+        if i[0] == int(score) and i[1] == int(time):
+            return res.index(i) + 1
+
+
+    con.close()
