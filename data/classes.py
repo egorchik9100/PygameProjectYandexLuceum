@@ -1,12 +1,14 @@
+
 import math
 import random
+import sqlite3
 import time
 
 import pygame
 from random import choice
 import pygame_menu
 
-from data.functions import load_image, music_crash_asteroid, parse_json
+from data.functions import load_image, music_crash_asteroid, parse_json, load_db, get_res
 
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -62,8 +64,11 @@ class MainScene:
         self.finish_menu = pygame_menu.Menu("Вы врезались в астероид", 500, 500, theme=pygame_menu.themes.THEME_BLUE)
         scores = self.finish_menu.add.label(f'Очки: {self.score}')
         times = self.finish_menu.add.label(f'ВРЕМЯ - {self.time}')
+        place = self.finish_menu.add.label(f'ВРЕМЯ - {self.time}')
+        place1 = self.finish_menu.add.label(f'ВРЕМЯ - {self.time}')
         one_more = self.finish_menu.add.button("Сыграть еще раз", self.play_one_more)
         exits = self.finish_menu.add.button("Выйти", self.exit_game)
+
         self.finish_menu.disable()
 
         # Главный цикл игры
@@ -172,7 +177,7 @@ class MainScene:
                 for asteroid in self.asteroids[:]:
                     if pygame.sprite.collide_rect(self.turret, asteroid) and not self.game_over and self.life == 0:
                         pygame.mixer.music.stop()
-                        pygame.mixer.music.load('sounds/crash.mp3')
+                        pygame.mixer.music.load('sounds/Crash.mp3')
                         pygame.mixer.music.play(-1)
                         for num in range(4):
                             self.turret.crash(num + 1)
@@ -183,10 +188,17 @@ class MainScene:
                         self.finish_menu.remove_widget(one_more)
                         self.finish_menu.remove_widget(exits)
                         self.finish_menu.remove_widget(times)
+                        self.finish_menu.remove_widget(place)
+                        self.finish_menu.remove_widget(place1)
                         self.time = time.time() - self.time
                         scores = self.finish_menu.add.label(f'СЧЕТ - {self.score}')
                         text = str(self.time).split('.')[0]
+                        load_db(self.score, int(text), self.level)
                         times = self.finish_menu.add.label(f'ВРЕМЯ - {text} сек')
+                        place = self.finish_menu.add.label('ВАШЕ МЕСТО В ТАБЛИЦЕ:')
+                        a = str(get_res(self.score, text))
+                        print(a, self.score, text)
+                        place1 = self.finish_menu.add.label(a)
                         one_more = self.finish_menu.add.button("Сыграть еще раз", self.play_one_more)
                         exits = self.finish_menu.add.button("Выйти", self.exit_game)
                         self.game_over = True
@@ -344,7 +356,7 @@ class StartWindow:
 
     def main_menu(self):
         running = True
-        self.menu = pygame_menu.Menu("Справка по игре", 600, 600, theme=pygame_menu.themes.THEME_DARK)
+        self.menu = pygame_menu.Menu("Справка об игре", 600, 600, theme=pygame_menu.themes.THEME_DARK)
         self.menu.add.label('Управление:', 'green')
         self.menu.add.label("'<' : '>' - управление турелью")
         self.menu.add.label("'space' - стрельба")
@@ -367,6 +379,8 @@ class StartWindow:
                     if spravka_button.collidepoint(mouse_pos):
                         self.menu.enable()
                         self.menu.mainloop(self.screen)
+                    if records_button.collidepoint(mouse_pos):
+                        return "records"
 
             self.screen.blit(load_image('space.jpg'), (0, 0))
             font = pygame.font.Font(None, 36)
@@ -378,7 +392,7 @@ class StartWindow:
             spravka_button = pygame.Rect(width // 2 - 150, height // 2 + 90, 300, 50)
             self.draw_button("Играть", play_button.x, play_button.y, play_button.width, play_button.height)
             self.draw_button("Рекорды", records_button.x, records_button.y, records_button.width, records_button.height)
-            self.draw_button("О игре", spravka_button.x, spravka_button.y, spravka_button.width, spravka_button.height)
+            self.draw_button("Об игре", spravka_button.x, spravka_button.y, spravka_button.width, spravka_button.height)
 
             pygame.display.update()
 
@@ -585,3 +599,63 @@ class Bullet(pygame.sprite.Sprite):
 
     def is_off_screen(self):
         return self.x < 0 or self.x > width or self.y < 0 or self.y > height
+
+
+class RecordsWindow:
+    def __init__(self, screen):
+        self.screen = screen
+        self.font = pygame.font.SysFont("Arial", 36)
+
+    def get_top_scores(self):
+        conn = sqlite3.connect('db/database.sqlite')
+        cursor = conn.cursor()
+        cursor.execute('''
+            SELECT score, time, level FROM data
+            ORDER BY score DESC, time ASC, level DESC
+            LIMIT 10
+        ''')
+        data = cursor.fetchall()
+        conn.close()
+        return data
+
+    def display_highscores(self):
+        scores = self.get_top_scores()
+        self.screen.fill((0, 0, 0))
+        y_offset = 10
+        title = self.font.render("Топ-10 рекордов", True, (255, 255, 255))
+        self.screen.blit(title, (self.screen.get_width() // 2 - title.get_width() // 2, y_offset))
+        y_offset += 50
+
+        headers = ["Место", "Score", "Time", "Level"]
+        header_x = [50, 250, 450, 650]  # Позиции по горизонтали для каждого столбца
+        for i, header in enumerate(headers):
+            header_text = self.font.render(header, True, (255, 255, 255))
+            self.screen.blit(header_text, (header_x[i], y_offset))
+        y_offset += 50
+
+        for index, (score, time, level) in enumerate(scores, start=1):
+            place_text = self.font.render(str(index), True, (255, 255, 255))
+            score_text = self.font.render(str(score), True, (255, 255, 255))
+            time_text = self.font.render(str(time), True, (255, 255, 255))
+            level_text = self.font.render(str(level), True, (255, 255, 255))
+            self.screen.blit(place_text, (header_x[0], y_offset))
+            self.screen.blit(score_text, (header_x[1], y_offset))
+            self.screen.blit(time_text, (header_x[2], y_offset))
+            self.screen.blit(level_text, (header_x[3], y_offset))
+            y_offset += 40
+
+        back_button = pygame.Rect(self.screen.get_width() // 2 - 100, self.screen.get_height() - 60, 200, 50)
+        pygame.draw.rect(self.screen, 'blue', back_button)
+        pygame.draw.rect(self.screen, (21, 51, 74), back_button, 3)
+        back_text = self.font.render("Назад", True, (255, 255, 255))
+        self.screen.blit(back_text, (back_button.x + 55, back_button.y + 5))
+        pygame.display.flip()
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                    return running
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if back_button.collidepoint(event.pos):
+                        running = 'menu'
+                        return running
