@@ -148,10 +148,10 @@ class MainScene:
                 if random.random() < self.asteroid_chance:
                     self.asteroids.append(Asteroid(self.screen, self.level))
                 if self.score > 10 and self.buff_flag <= 0:
-                    if random.random() < 0.2:
+                    if random.random() < 0.0002:
                         self.buff_flag = 5
                         self.buffs_white.append(BuffWhite(self.screen))
-                    if random.random() < 0.2:
+                    if random.random() < 0.0002:
                         self.buff_flag = 5
                         self.buffs_red.append(BuffRed(self.screen))
                     if random.random() < 0.0002:
