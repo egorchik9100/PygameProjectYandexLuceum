@@ -521,10 +521,6 @@ class BuffWhite(pygame.sprite.Sprite, Buff):
         self.screen.blit(load_image("buffs/white_alldamage 17x70.png", colorkey=-1), (self.x, self.y))
 
 
-'''class BuffRed(pygame.sprite.Sprite, Buff):
-    def draw(self):
-        self.screen.blit(load_image("buffs/red_hp 20x28.png", colorkey=-1), (self.x, self.y))'''
-
 
 class Turret(pygame.sprite.Sprite):
     def __init__(self, screen):
