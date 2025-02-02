@@ -5,6 +5,7 @@ import sqlite3
 import time
 
 import pygame
+from random import choice
 import pygame_menu
 
 from data.functions import load_image, music_crash_asteroid, parse_json, load_db, get_res
@@ -19,10 +20,10 @@ num_of_ship = 0
 class MainScene:
     def __init__(self, screen):
         self.asteroids = []
+        self.color = "green"
         self.turret = Turret(screen)
         self.bullets = []
         self.buffs_white = []  # список зелий, которые уничтожают астероиды на экране;
-        self.buffs_green = []  # список зелий, которые временно меняют корабль на 8;
         self.buffs_blue = []  # список зелий, которые пополняют опыт;
         self.buffs_red = []  # список зелий, которые восстанавливают здоровье;
         self.can_shoot = True
@@ -30,17 +31,19 @@ class MainScene:
         self.last_shot_time = 0
         self.screen = screen
         self.paused = False
+        self.score_music_level = 0  # Флаг для проигрывания музыки при повышении уровня;
         self.score = 0
-        self.score_flag = True
+        self.buff_flag = 0
+        self.score_flag = True  # для переключения на 9 корабль, при достижении 112 очков;
         self.in_game = True
-        self.level = 0
+        self.level = 0  # текущий левел;
+        self.life = 100
         self.asteroid_chance = 0.05
         self.time = 0
         self.game_over = False  # Флаг для отслеживания окончания игры
 
     def run_game(self):
-
-        self.time = time.time()
+        self.time = time.time()  # время запуска раунда;
         # Создание астероидов, турели, списка пуль
         for i in range(5):
             self.asteroids.append(Asteroid(self.screen, self.level))
@@ -96,14 +99,14 @@ class MainScene:
                     self.turret.update(-1)
                 if keys[pygame.K_RIGHT]:
                     self.turret.update(1)
-                # Чит коды
+
+                # Чит-коды
                 if keys[pygame.K_9]:  # при нажимании кнопки 9, текущий корабль сменяется на 9;
                     num_of_ship = 9
                 if keys[pygame.K_1]:  # при нажимании кнопки 9, текущий корабль сменяется на 1(начальный);
                     num_of_ship = 1
                 if keys[pygame.K_8]:  # при нажимании кнопки 9, текущий корабль сменяется на 8;
                     num_of_ship = 8
-                    print(f"in here: {num_of_ship}")
                 if self.score >= 112 and self.score_flag:  # когда игрок достигает 112 очков и больше, его корабль сменяется на 9;
                     num_of_ship = 9
                     self.score_flag = False
@@ -115,6 +118,11 @@ class MainScene:
                                                self.turret.angle, self.screen, 1, self.level))
                     self.can_shoot = False  # Запрещаем стрельбу;
                     self.last_shot_time = current_time  # Обновляем время последнего выстрела;
+
+                # Проигрываем музыку при повышении уровня;
+                if 1 <= self.level <= 20 and self.level > self.score_music_level:
+                    self.score_music_level = self.level  # алгоритм позволяющий проигрывать музыку 1 раз;
+                    music_crash_asteroid(thing="level_up")
 
                 # Разрешаем стрельбу;
                 if not self.can_shoot and current_time - self.last_shot_time > self.shoot_delay:
@@ -129,9 +137,6 @@ class MainScene:
                 for buff_b in self.buffs_blue[:]:
                     if buff_b.update():
                         self.buffs_blue.remove(buff_b)
-                for buff_g in self.buffs_green[:]:
-                    if buff_g.update():
-                        self.buffs_green.remove(buff_g)
                 for buff_w in self.buffs_white[:]:
                     if buff_w.update():
                         self.buffs_white.remove(buff_w)
@@ -142,17 +147,21 @@ class MainScene:
                 # Добавляем новые астероиды и зелья (для постоянной игры);
                 if random.random() < self.asteroid_chance:
                     self.asteroids.append(Asteroid(self.screen, self.level))
-                if self.score > 100:
+                if self.score > 10 and self.buff_flag <= 0:
                     if random.random() < 0.0002:
+                        self.buff_flag = 5
                         self.buffs_white.append(BuffWhite(self.screen))
                     if random.random() < 0.0002:
+                        self.buff_flag = 5
                         self.buffs_red.append(BuffRed(self.screen))
                     if random.random() < 0.0002:
+                        self.buff_flag = 5
                         self.buffs_blue.append(BuffBlue(self.screen))
-                    if random.random() < 0.0002:
-                        self.buffs_green.append(BuffGreen(self.screen))
+                if self.buff_flag > 0 and random.random() < 0.008:
+                    self.buff_flag -= 1
+
                 # Новый уровень
-                if self.score // 10 > self.level:
+                if self.score // 50 > self.level:
                     self.level += 1
                     self.asteroid_chance += parse_json('asteroid', 'chance')
 
@@ -165,7 +174,7 @@ class MainScene:
 
                 # проверка столкновений турели с астероидом
                 for asteroid in self.asteroids[:]:
-                    if pygame.sprite.collide_rect(self.turret, asteroid) and not self.game_over:
+                    if pygame.sprite.collide_rect(self.turret, asteroid) and not self.game_over and self.life == 0:
                         pygame.mixer.music.stop()
                         pygame.mixer.music.load('sounds/Crash.mp3')
                         pygame.mixer.music.play(-1)
@@ -196,8 +205,10 @@ class MainScene:
                         self.finish_menu.enable()
                         self.finish_menu.mainloop(self.screen)  # Отображаем меню finish'''
                         self.time = time.time()
+                    if pygame.sprite.collide_rect(self.turret, asteroid) and not self.game_over and self.life > 0:
+                        self.life -= 1
 
-                # Проверка столкновений
+                # Проверка столкновений;
                 for bullet in self.bullets[:]:
                     for asteroid in self.asteroids[:]:
                         distance = math.dist((bullet.x, bullet.y), (asteroid.x, asteroid.y))
@@ -218,17 +229,11 @@ class MainScene:
                         distance = math.dist((bullet.x, bullet.y), (buff_w.x, buff_w.y))
                         if distance < buff_w.size:
                             try:
+                                music_crash_asteroid(thing="buff")
+                                self.score += len(self.asteroids) * 4  # добавление к счету количества очков за все астероиды;
+                                self.asteroids.clear()  # удаление всех астероидов при попадании в белое зелье;
+                                self.buff_flag = False
                                 self.buffs_white.remove(buff_w)
-                                self.bullets.remove(bullet)
-                            except Exception as er:
-                                print(er)
-                            break
-
-                    for buff_g in self.buffs_green[:]:
-                        distance = math.dist((bullet.x, bullet.y), (buff_g.x, buff_g.y))
-                        if distance < buff_g.size:
-                            try:
-                                self.buffs_green.remove(buff_g)
                                 self.bullets.remove(bullet)
                             except Exception as er:
                                 print(er)
@@ -237,7 +242,13 @@ class MainScene:
                     for buff_r in self.buffs_red[:]:
                         distance = math.dist((bullet.x, bullet.y), (buff_r.x, buff_r.y))
                         if distance < buff_r.size:
+                            if self.life + 200 <= 512:
+                                self.life += 200  # начисление 200 процентов к кораблю;
+                            elif self.life <= 512:
+                                self.life += 512 - self.life
                             try:
+                                music_crash_asteroid(thing="buff")
+                                self.buff_flag = False
                                 self.buffs_red.remove(buff_r)
                                 self.bullets.remove(bullet)
                             except Exception as er:
@@ -249,17 +260,33 @@ class MainScene:
                         if distance < buff_b.size:
                             self.score += 100
                             try:
+                                music_crash_asteroid(thing="buff")
+                                self.buff_flag = False
                                 self.buffs_blue.remove(buff_b)
                                 self.bullets.remove(bullet)
                             except Exception as er:
                                 print(er)
                             break
 
-                # Отрисовка
-                # Прямоугольник для счета
+                # Отрисовка;
+                # Прямоугольник для счета;
                 text_score = font.render(f"Счёт: {int(self.score)}", True, (100, 100, 100))
                 rect_score = text_score.get_rect(topright=(width - 50, 20))
 
+                # Проверка уровня жизни;
+                if 80 < self.life <= 100:
+                    self.color = "green"
+                if 50 < self.life <= 80:
+                    self.color = "yellow"
+                if 20 < self.life <= 50:
+                    self.color = "orange"
+                if 0 <= self.life <= 20:
+                    self.color = "red"
+                # Прямоугольник для жизни;
+                text_life = font.render(f"HP Starship: {int(self.life)}%", True, self.color)
+                rect_life = text_life.get_rect(topright=(width - 200, 20))
+
+                # Прямоугольник для уровня;
                 text_level = font.render(f"Уровень: {int(self.level)}", True, (100, 100, 100))
                 rect_level = text_score.get_rect(topright=(110, 20))
 
@@ -272,23 +299,22 @@ class MainScene:
                     buff_w.draw()
                 for buff_r in self.buffs_red:
                     buff_r.draw()
-                for buff_g in self.buffs_green:
-                    buff_g.draw()
                 for buff_b in self.buffs_blue:
                     buff_b.draw()
                 for bullet in self.bullets:
                     bullet.draw()
-                self.screen.blit(text_score, rect_score)  # Вывод количества очков
-                self.screen.blit(text_level, rect_level)
-                self.screen.blit(pause_button_text, pause_button_rect)  # Вывод кнопки паузы
-                pygame.display.flip()  # Обновление экрана
+                self.screen.blit(text_life, rect_life)  # Вывод количества здоровья;
+                self.screen.blit(text_score, rect_score)  # Вывод количества очков;
+                self.screen.blit(text_level, rect_level)  # Вывод текущего уровня;
+                self.screen.blit(pause_button_text, pause_button_rect)  # Вывод кнопки паузы;
+                pygame.display.flip()  # Обновление экрана;
                 clock.tick(60)
             else:
                 if not self.menu.is_enabled() and not self.finish_menu.is_enabled():
-                    self.screen.blit(pause_button_text, pause_button_rect)  # Вывод кнопки паузы
+                    self.screen.blit(pause_button_text, pause_button_rect)  # Вывод кнопки паузы;
                     pygame.display.flip()
 
-                # Задержка для контроля FPS
+                # Задержка для контроля FPS;
             pygame.time.Clock().tick(60)
 
     def resume_game(self):
@@ -304,6 +330,7 @@ class MainScene:
         self.game_over = False
         self.paused = False
         self.score = 0
+        self.life = 101
         self.score_flag = True
         self.level = 0
         self.asteroids.clear()
@@ -334,7 +361,7 @@ class StartWindow:
         self.menu.add.label("'<' : '>' - управление турелью")
         self.menu.add.label("'space' - стрельба")
         self.menu.add.label('АВТОРЫ:')
-        self.menu.add.label('Беликов А, Советов Е, Челноков Е')
+        self.menu.add.label('Его высочество - Беликов А. Р., Советов Е, Челноков Е')
         self.menu.add.label('Проект на GitHub:')
         self.menu.add.label('https://clck.ru/3G62aD')
         self.menu.add.button("OK", self.skip_menu)
@@ -381,7 +408,7 @@ class Asteroid(pygame.sprite.Sprite):
         self.x = random.randint(0, width - self.size)
         self.y = -self.size
         self.speed = random.randint(2, 5) + parse_json('asteroid', 'speed') * level
-        self.health = random.choice([10, 20, 30, 40, 50]) + parse_json('asteroid', 'hp') * level
+        self.health = random.choice([10, 20, 30, 40]) + parse_json('asteroid', 'hp') * level
         self.max_health = self.health
         self.rect = pygame.Rect(self.x, self.y, self.size - 10, self.size - 10)
 
@@ -404,17 +431,17 @@ class Asteroid(pygame.sprite.Sprite):
             self.screen.blit(load_image("asteroids/size_45/Астероид из блэндера_45_new.png", colorkey=-1),
                              (self.rect.x, self.rect.y))
         cords = (self.rect.x, self.rect.y - 5, self.health / self.max_health * self.size, 5)
-        if self.max_health - self.health == 10:
+
+        if self.max_health - self.health in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
             pygame.draw.rect(self.screen, "yellow", cords)
-        if self.max_health - self.health == 20:
+        if self.max_health - self.health in [11, 12, 13, 14, 15, 16, 17, 18, 19, 20]:
             pygame.draw.rect(self.screen, "orange", cords)
-        if self.max_health - self.health == 30:
+        if self.max_health - self.health in [21, 22, 23, 24, 25, 26, 27, 28, 29, 30]:
             pygame.draw.rect(self.screen, (193, 97, 68), cords)
-        if self.health == 10:
+        if self.max_health != 10 and self.health == 10:
             pygame.draw.rect(self.screen, "red", cords)
         if self.max_health - self.health == 0:
             pygame.draw.rect(self.screen, "green", cords)
-
 
     def damage(self, dam):
         self.health = self.health - dam
@@ -424,7 +451,7 @@ class BuffBlue(pygame.sprite.Sprite):
     def __init__(self, screen):
         super().__init__()
         self.screen = screen
-        self.size = random.randint(20, 50)
+        self.size = 20
         self.x = random.randint(0, width - self.size)
         self.y = -self.size
         self.speed = 3
@@ -440,14 +467,34 @@ class BuffBlue(pygame.sprite.Sprite):
        self.screen.blit(load_image("buffs/blue_expir 20x32.png", colorkey=-1), (self.x, self.y))
 
 
+class BuffRed(pygame.sprite.Sprite):
+    def __init__(self, screen):
+        super().__init__()
+        self.screen = screen
+        self.size = 21
+        self.x = random.randint(0, width - self.size)
+        self.y = -self.size
+        self.speed = 4
+        self.health = 10
+
+    def update(self):
+        self.y += self.speed
+        if self.y > height:
+            return True  # Удаляем зелье, если оно вышло за экран
+        return False
+
+    def draw(self):
+       self.screen.blit(load_image("buffs/red_hp 20x28.png", colorkey=-1), (self.x, self.y))
+
+
 class BuffWhite(pygame.sprite.Sprite):
     def __init__(self, screen):
         super().__init__()
         self.screen = screen
-        self.size = random.randint(20, 50)
+        self.size = 17
         self.x = random.randint(0, width - self.size)
         self.y = -self.size
-        self.speed = 3
+        self.speed = 3.5
         self.health = 10
 
     def update(self):
@@ -460,89 +507,41 @@ class BuffWhite(pygame.sprite.Sprite):
         self.screen.blit(load_image("buffs/white_alldamage 17x70.png", colorkey=-1), (self.x, self.y))
 
 
-class BuffRed(pygame.sprite.Sprite):
-    def __init__(self, screen):
-        super().__init__()
-        self.screen = screen
-        self.size = random.randint(20, 50)
-        self.x = random.randint(0, width - self.size)
-        self.y = -self.size
-        self.speed = 3
-        self.health = 10
-
-    def update(self):
-        self.y += self.speed
-        if self.y > height:
-            return True  # Удаляем зелье, если оно вышло за экран
-        return False
-
-    def draw(self):
-        self.screen.blit(load_image("buffs/red_hp 20x28.png", colorkey=-1), (self.x, self.y))
-
-
-class BuffGreen(pygame.sprite.Sprite):
-    def __init__(self, screen):
-        super().__init__()
-        self.screen = screen
-        self.size = random.randint(20, 50)
-        self.x = random.randint(0, width - self.size)
-        self.y = -self.size
-        self.speed = 3
-        self.health = 10
-
-    def update(self):
-        self.y += self.speed
-        if self.y > height:
-            return True  # Удаляем зелье, если оно вышло за экран
-        return False
-
-    def draw(self):
-        pass
-
-
 class Turret(pygame.sprite.Sprite):
     def __init__(self, screen):
         super().__init__()
         self.screen = screen
         self.x = width // 2
         self.y = height - 60
-        self.angle = 90  # Начальный угол
-        self.speed = 8  # Скорость перемещения турели
-        self.flag_turret = 1
+        self.angle = 90  # Начальный угол;
+        self.speed = 8  # Скорость перемещения турели;
         self.rect = pygame.Rect(self.x, self.y, 40, 40)
 
     def update(self, dx):
         if num_of_ship == 8:
             if dx < 0:
-                self.x += dx * self.speed - 3# Изменение координаты x, есди пользователь нажал кнопку <-
+                self.x += dx * self.speed - 3# Изменение координаты x, есди пользователь нажал кнопку <-;
             else:
-                self.x += dx * self.speed + 3 # Изменение координаты x, есди пользователь нажал кнопку ->
-            self.x = max(0, min(self.x, 736))  # Ограничение движения по ширине экрана
+                self.x += dx * self.speed + 3 # Изменение координаты x, есди пользователь нажал кнопку ->;
+            self.x = max(0, min(self.x, 736))  # Ограничение движения по ширине экрана;
         if num_of_ship == 0 or num_of_ship == 1:
             self.x += dx * self.speed
-            self.x = max(0, min(self.x, 741))  # Ограничение движения по ширине экрана
+            self.x = max(0, min(self.x, 741))  # Ограничение движения по ширине экрана;
         if num_of_ship == 9:
             self.x += dx * self.speed
-            self.x = max(0, min(self.x, 755))  # Ограничение движения по ширине экрана
+            self.x = max(0, min(self.x, 755))  # Ограничение движения по ширине экрана;
         self.rect.x = self.x
 
     def draw(self):
-        if self.flag_turret == 0:
-            # Рисуем турель (простая линия)
-            pygame.draw.line(self.screen, white, (self.x, self.y),
-                             (self.x + 50 * math.cos(math.radians(self.angle)),
-                              self.y - 50 * math.sin(math.radians(self.angle))), 5)
-            pygame.draw.circle(self.screen, white, (self.x, self.y), 10)  # Основа турели
-        if self.flag_turret == 1:
-            global num_of_ship
-            if num_of_ship == 9:
-                self.screen.blit(load_image("starships/size_45/yellow 45x41.png"), (self.x, self.y))
-            if num_of_ship == 8:
-                self.screen.blit(load_image("starships/size_45/white_level11 60x60.png"), (self.x, self.y))
-            if num_of_ship == 1:
-                self.screen.blit(load_image("starships/size_45/white_level1 56x55-no-bg-preview.png"), (self.x, self.y))
-            if num_of_ship == 0:
-                self.screen.blit(load_image("starships/size_45/white_level1 56x55-no-bg-preview.png"), (self.x, self.y))
+        global num_of_ship
+        if num_of_ship == 9:
+            self.screen.blit(load_image("starships/size_45/yellow 45x41.png"), (self.x, self.y))
+        if num_of_ship == 8:
+            self.screen.blit(load_image("starships/size_45/white_level11 60x60.png"), (self.x, self.y))
+        if num_of_ship == 1:
+            self.screen.blit(load_image("starships/size_45/white_level1 56x55-no-bg-preview.png"), (self.x, self.y))
+        if num_of_ship == 0:
+            self.screen.blit(load_image("starships/size_45/white_level1 56x55-no-bg-preview.png"), (self.x, self.y))
 
     def crash(self, num):
         self.screen.blit(load_image(f"starships/crash/crash{num}.png"), (self.x - 20, self.y - 50))
@@ -556,6 +555,7 @@ class Turret(pygame.sprite.Sprite):
                 self.frames.append(sheet.subsurface(pygame.Rect(
                     frame_location, self.rect.size)))
 
+
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, angle, screen, force, level):
         super().__init__()
@@ -564,31 +564,39 @@ class Bullet(pygame.sprite.Sprite):
 
         global num_of_ship
         if num_of_ship == 9:
-            self.x = x + 22
+            self.x = x + 22  # для испускания пуль из центра кораблей;
         elif num_of_ship == 8:
             self.x = x + 26
         else:
             self.x = x + 28.5
         self.y = y
-        self.angle = math.radians(angle)  # Преобразование угла в радианы
-        self.speed = 10 + parse_json('bullet', 'speed') * level
-        self.damage = 10 + parse_json('bullet', 'damage') * level
+        self.angle = math.radians(angle)  # Преобразование угла в радианы;
+        if num_of_ship == 8:
+            self.speed = 20 + parse_json('bullet', 'speed') * level
+        else:
+            self.speed = 10 + parse_json('bullet', 'speed') * level
+        if num_of_ship == 9:
+            self.damage = 20 + parse_json('bullet', 'damage') * level
+        else:
+            self.damage = 10 + parse_json('bullet', 'damage') * level
 
     def update(self):
         if num_of_ship == 8:
-            self.y -= self.speed * math.sin(self.angle) + 18 # Y убывает вверх
+            self.y -= self.speed * math.sin(self.angle) + 18 # Y убывает вверх;
         else:
-            self.y -= self.speed * math.sin(self.angle)  # Y убывает вверх
+            self.y -= self.speed * math.sin(self.angle)  # Y убывает вверх;
         self.x += self.speed * math.cos(self.angle)
 
     def draw(self):
         if num_of_ship == 8:
-            if 0 <= self.y <= 39:  # проверка пули на отдaленность от турели, если от 0 до 39, то изображение круглой
+            if 0 <= self.y <= 39:  # проверка пули на отдaленность от турели, если от 0 до 39, то изображение круглой;
                 self.screen.blit(load_image("bullet/bullet_new_after 9x16.png"), (self.x, self.y))
-            else:  # иначе более вытянутая, благодаря этому переходу кажется, что пуля увеличивает скорость(но уверяю, это не так)
+            else:  # иначе более вытянутая, благодаря этому переходу кажется, что пуля увеличивает скорость(но уверяю, это не так);
                 self.screen.blit(load_image("bullet/bullet_before 9x25.png"), (self.x, self.y))
+        elif num_of_ship == 9:
+            pygame.draw.circle(self.screen, "yellow", (int(self.x), int(self.y)), 2)
         else:
-            pygame.draw.circle(self.screen, white, (int(self.x), int(self.y)), 2)
+            pygame.draw.circle(self.screen, "white", (int(self.x), int(self.y)), 2)
 
     def is_off_screen(self):
         return self.x < 0 or self.x > width or self.y < 0 or self.y > height
