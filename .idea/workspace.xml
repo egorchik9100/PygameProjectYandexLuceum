@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="уровень жизни добавлен">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="9f9494d6-1e41-4008-96a0-7851a068d904" name="Changes" comment="Добавлено красное зелье, которое добавляет здоровье кораблю">
       <change beforePath="$PROJECT_DIR$/data/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/database.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/db/database.sqlite" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sounds/763e168d5383bc7.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/sounds/buffs.mp3" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,7 +178,15 @@
       <option name="project" value="LOCAL" />
       <updated>1738489845089</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Добавлено красное зелье, которое добавляет здоровье кораблю">
+      <option name="closed" value="true" />
+      <created>1738500767067</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1738500767067</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -209,6 +212,7 @@
     <MESSAGE value="Добавлено XP астероидов" />
     <MESSAGE value="Исправлен файл бд" />
     <MESSAGE value="уровень жизни добавлен" />
-    <option name="LAST_COMMIT_MESSAGE" value="уровень жизни добавлен" />
+    <MESSAGE value="Добавлено красное зелье, которое добавляет здоровье кораблю" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавлено красное зелье, которое добавляет здоровье кораблю" />
   </component>
 </project>

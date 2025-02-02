@@ -208,7 +208,7 @@ class MainScene:
                     if pygame.sprite.collide_rect(self.turret, asteroid) and not self.game_over and self.life > 0:
                         self.life -= 1
 
-                # Проверка столкновений
+                # Проверка столкновений;
                 for bullet in self.bullets[:]:
                     for asteroid in self.asteroids[:]:
                         distance = math.dist((bullet.x, bullet.y), (asteroid.x, asteroid.y))
@@ -596,25 +596,27 @@ class Bullet(pygame.sprite.Sprite):
         else:
             self.x = x + 28.5
         self.y = y
-        self.angle = math.radians(angle)  # Преобразование угла в радианы
+        self.angle = math.radians(angle)  # Преобразование угла в радианы;
         self.speed = 10 + parse_json('bullet', 'speed') * level
         self.damage = 10 + parse_json('bullet', 'damage') * level
 
     def update(self):
         if num_of_ship == 8:
-            self.y -= self.speed * math.sin(self.angle) + 18 # Y убывает вверх
+            self.y -= self.speed * math.sin(self.angle) + 18 # Y убывает вверх;
         else:
-            self.y -= self.speed * math.sin(self.angle)  # Y убывает вверх
+            self.y -= self.speed * math.sin(self.angle)  # Y убывает вверх;
         self.x += self.speed * math.cos(self.angle)
 
     def draw(self):
         if num_of_ship == 8:
-            if 0 <= self.y <= 39:  # проверка пули на отдaленность от турели, если от 0 до 39, то изображение круглой
+            if 0 <= self.y <= 39:  # проверка пули на отдaленность от турели, если от 0 до 39, то изображение круглой;
                 self.screen.blit(load_image("bullet/bullet_new_after 9x16.png"), (self.x, self.y))
-            else:  # иначе более вытянутая, благодаря этому переходу кажется, что пуля увеличивает скорость(но уверяю, это не так)
+            else:  # иначе более вытянутая, благодаря этому переходу кажется, что пуля увеличивает скорость(но уверяю, это не так);
                 self.screen.blit(load_image("bullet/bullet_before 9x25.png"), (self.x, self.y))
+        if num_of_ship == 9:
+            pygame.draw.circle(self.screen, "yellow", (int(self.x), int(self.y)), 2)
         else:
-            pygame.draw.circle(self.screen, white, (int(self.x), int(self.y)), 2)
+            pygame.draw.circle(self.screen, "white", (int(self.x), int(self.y)), 2)
 
     def is_off_screen(self):
         return self.x < 0 or self.x > width or self.y < 0 or self.y > height
