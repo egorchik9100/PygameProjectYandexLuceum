@@ -361,7 +361,7 @@ class StartWindow:
         self.menu.add.label("'<' : '>' - управление турелью")
         self.menu.add.label("'space' - стрельба")
         self.menu.add.label('АВТОРЫ:')
-        self.menu.add.label('Советов Е, Ченоков Е, Беликов А')
+        self.menu.add.label('Советов Е, Чесноков Е, Беликов А')
         self.menu.add.label('Проект на GitHub:')
         self.menu.add.label('https://clck.ru/3G62aD')
         self.menu.add.button("OK", self.skip_menu)
